@@ -5,6 +5,7 @@
 
 -- CREATE DATABASE
 CREATE DATABASE fct;
+use fct;
 
 
 -- CREATE TABLES
@@ -20,17 +21,6 @@ CREATE TABLE documents(
     PRIMARY KEY (text_id)
 );
 
--- For testing zip file
-CREATE TABLE documents2(
-    text_id INTEGER AUTO_INCREMENT,
-    name VARCHAR(100) NOT NULL,
-    date VARCHAR(50),
-    author VARCHAR(50),
-    source VARCHAR(50),
-    collection VARCHAR(50),
-    language VARCHAR(10),
-    PRIMARY KEY (text_id)
-);
 
 -- TABLE : corpus
 CREATE TABLE corpus (
@@ -43,6 +33,7 @@ CREATE TABLE corpus (
     PRIMARY KEY(corpus_id)
 );
 
+
 -- TABLE : specialties
 CREATE TABLE specialties (
     specialty_id INTEGER AUTO_INCREMENT,
@@ -50,6 +41,7 @@ CREATE TABLE specialties (
     description VARCHAR(500),
     PRIMARY KEY (specialty_id)
 );
+
 
 -- TABLE : document_corpus
 -- text_id references the text_id in documents table.
@@ -62,6 +54,7 @@ CREATE TABLE document_corpus (
     PRIMARY KEY (text_id, corpus_id)
 );
 
+
 -- TABLE : document_specialties
 -- text_id references the text_id in documents table.
 -- specialty_id references specialty id in specialties tables
@@ -72,6 +65,7 @@ CREATE TABLE document_specialties (
     specialty_id INTEGER REFERENCES specialties(specialty_id),
     PRIMARY KEY (text_id, specialty_id)
 );
+
 
 -- TABLE : annotations
 -- corpus_id references corpus_id in corpus table
@@ -100,6 +94,7 @@ CREATE TABLE ontologies(
     PRIMARY KEY (ontology_id)
 );
 
+
 -- TABLE : normalizations
 -- ontology_id references ontology_id in ontologies tables
 -- code_id references code_id in ontology_ontology_descriptors tables. Created manually
@@ -110,6 +105,7 @@ CREATE TABLE normalizations (
     semantic_relation VARCHAR(50),
     PRIMARY KEY(norm_id)
 );
+
 
 -- TABLE : ontology_descriptors
 -- code_id : created by the programmer. Primary key of this table
@@ -125,6 +121,7 @@ CREATE TABLE ontology_descriptors (
     term_type VARCHAR(20),
     PRIMARY KEY (code_id)
 );
+
 
 -- TABLE : ontology_ontology_descriptors
 -- Description: Relation table between ontology and ontology_descriptors
@@ -158,7 +155,6 @@ ALTER TABLE ontology_ontology_descriptors ADD FOREIGN KEY (code_id) REFERENCES o
 
 
 -- Insert values for testing
-
 -- Table : documents
 insert into documents values(1, 'file1.txt', '2023-02-15', 'siddique','ncbi', 'collection1', 'es');
 insert into documents values(2, 'file2.txt', '2023-02-16', 'siddique','biomedical', 'collection2', 'en');
@@ -230,6 +226,3 @@ insert into ontology_ontology_descriptors values(2, 5);
 insert into ontology_ontology_descriptors values(3, 4);
 insert into ontology_ontology_descriptors values(4, 4);
 insert into ontology_ontology_descriptors values(2, 3);
-
-
-
