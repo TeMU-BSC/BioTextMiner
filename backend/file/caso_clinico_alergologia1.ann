@@ -1,0 +1,32 @@
+T1	PROCEDIMIENTO 524 576	pruebas epicutáneas con batería estándar y acrilatos
+T2	PROCEDIMIENTO 1099 1110	corticoides
+T3	PROCEDIMIENTO 1112 1128	antihistamínicos
+T4	ENFERMEDAD 130 155	asma alérgico a gramíneas
+T5	ENFERMEDAD 223 246	lesión en dorso de mano
+T6	ENFERMEDAD 1378 1409	dermatitis alérgica de contacto
+T7	FARMACO 279 296	metilprednisolona
+T8	FARMACO 353 360	furoato
+T9	FARMACO 364 374	mometasona
+T10	FARMACO 1259 1282	hidroxietil metacrilato
+T11	FARMACO 1284 1306	2-hidroxietil acrilato
+T12	SEXO-SUJETO-ASISTENCIA 0 5	Mujer
+T13	EDAD-SUJETO-ASISTENCIA 9 16	38 años
+T14	PROFESION 26 34	auxiliar
+T15	EDAD-SUJETO-ASISTENCIA 99 106	14 años
+T16	PACIENTE 26 62	auxiliar en una clínica odontológica
+T17	SANITARIO 191 218	médico de atención primaria
+T18	SANITARIO 431 458	médico de atención primaria
+T19	SANITARIO 1497 1508	dermatólogo
+T20	PROFESION 26 62	auxiliar en una clínica odontológica
+T21	PROFESION 191 218	médico de atención primaria
+T22	PROFESION 431 458	médico de atención primaria
+T23	PROFESION 1497 1508	dermatólogo
+T24	UNCLEAR 146 155	gramíneas
+T25	NORMALIZABLES 279 296	metilprednisolona
+T26	NORMALIZABLES 364 374	mometasona
+T27	NORMALIZABLES 1099 1110	corticoides
+T28	SPECIES 0 5	Mujer
+T29	SPECIES 146 155	gramíneas
+T30	SPECIES 191 218	médico de atención primaria
+T31	SPECIES 431 458	médico de atención primaria
+T32	SPECIES 676 684	paciente

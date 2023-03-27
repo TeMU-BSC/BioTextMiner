@@ -1,0 +1,34 @@
+T1	SINTOMA 139 156	síntomas cutáneos
+T2	SINTOMA 779 799	resultados positivos
+T3	SINTOMA 1901 1923	síntomas respiratorios
+T4	PROCEDIMIENTO 660 685	test epicutáneo de parche
+T5	PROCEDIMIENTO 912 931	rinoscopia anterior
+T6	PROCEDIMIENTO 934 954	fibronaso-endoscopia
+T7	PROCEDIMIENTO 978 998	radiografía de tórax
+T8	PROCEDIMIENTO 1884 1895	corticoides
+T9	ENFERMEDAD 88 98	dermatitis
+T10	ENFERMEDAD 264 278	rinitis serosa
+T11	ENFERMEDAD 319 336	eccema diseminado
+T12	ENFERMEDAD 1131 1135	asma
+T13	ENFERMEDAD 1137 1157	alergia respiratoria
+T14	EDAD-SUJETO-ASISTENCIA 12 19	27 años
+T15	SEXO-SUJETO-ASISTENCIA 26 35	masculino
+T16	PACIENTE 37 69	operario de la industria química
+T17	PACIENTE 1591 1599	operario
+T18	PACIENTE 1764 1813	comienza a trabajar en el ramo de la construcción
+T19	PROFESION 37 69	operario de la industria química
+T20	PROFESION 1591 1599	operario
+T21	PROFESION 1764 1813	comienza a trabajar en el ramo de la construcción
+T22	NORMALIZABLES 838 845	potasio
+T23	NORMALIZABLES 848 866	cloruro de cobalto
+T24	NORMALIZABLES 1271 1276	sales
+T25	NORMALIZABLES 1397 1402	sodio
+T26	NORMALIZABLES 1541 1545	goma
+T27	NORMALIZABLES 1884 1895	corticoides
+T28	SPECIES 0 8	Paciente
+T29	SPECIES 26 35	masculino
+T30	SPECIES 301 309	paciente
+T31	SPECIES 1104 1114	familiares
+T32	SPECIES 1117 1127	personales
+T33	SPECIES 1289 1297	paciente
+T34	SPECIES 1646 1654	paciente
