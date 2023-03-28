@@ -4,5 +4,7 @@ apunts.txt
 data/
 get_data.py
 pytest.py
+
+# Tsv files
 sct20220430_es_INT-None_none-v0_copy.tsv
 sct20220430_es_INT-None_none-v0.tsv
