@@ -17,6 +17,9 @@ from flask import Flask,jsonify,request
 # Import documents model
 import application.models.OntologyDescriptors as OntologyDescriptors
 
+# Import csv
+import csv
+
 #----------------------------------------------------------------------------#
 # Routes
 #----------------------------------------------------------------------------#
@@ -184,3 +187,79 @@ def select_descriptors_ontology(ontologyid):
 # 127.0.0.1:5000/descriptors-by-ontology/4
 
 # Method GET
+
+
+# Route to upload a tsv file in the server and insert in the database
+# --------------------------------------------------------------------------------------------
+@app.route('/upload_tsv', methods=['POST'])
+def upload_file():
+
+    # Get file
+    file = request.files['file']
+    file_path = file.filename
+
+    # Open the file in read mode
+    with open(file_path, 'r') as f:
+
+        # Read the file data
+        data = f.read()
+    
+        # Chek if the file extension is tsv
+        if file.filename.endswith('.tsv'):
+            
+            # Split lines with delimiter
+            reader = csv.reader(data.splitlines(), delimiter='\t')
+
+            # Skip header
+            next(reader)
+
+            filtered = []
+
+            # For each row in reader, append data in the array.
+            for row in reader:
+
+                descriptor_id = row[0] 
+                ontology_id = 1
+                descriptor = row[1]
+                semantic_label = row[2]
+                language = row[8]
+                term_type = row[3]
+
+                mydata = descriptor_id, ontology_id, descriptor, semantic_label, language, term_type
+                filtered.append(mydata)
+
+
+            # Insert data in database. 
+            # Use the function in model, passing the filtered data as parameter
+            result = OntologyDescriptors.insert_tsv_data(filtered)
+            
+            # Return some response
+            return 'File loaded successfully!'
+        
+        else:
+
+            # Return error message
+            return '¡The file is not a tsv file!'
+
+# -------------- For testing purposes in terminal ------------
+# curl -X POST -F file=@sct20220430_es_INT-None_none-v0.tsv "localhost:5000/upload_tsv"
+
+
+# Function to filter data of tsv files
+# ------------------------------------------------------------------------
+def filter_data(data, column): # Not used yet
+
+    # Obtener los índices de las columnas code y language
+    code_index, language_index = None, None
+    for index, column_name in enumerate(data[0]):
+        if column_name == 'code':
+            code_index = index
+        if column_name == 'language':
+            language_index = index
+    
+    # Filtrar los datos según la columna específica
+    filtered_data = []
+    for row in data:
+        filtered_row = [row[code_index], row[language_index]]
+        filtered_data.append(filtered_row)
+    return filtered_data

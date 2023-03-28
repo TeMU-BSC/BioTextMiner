@@ -124,3 +124,25 @@ def select_descriptors_by_ontology(ontologyid):
     # fetchall and return the data
         data = cursor.fetchall()
         return data
+    
+
+# Function to insert data in ontology descriptors table
+# ---------------------------------------------------------------------------------
+def insert_tsv_data(data):
+    '''Input parameters: data to insert in the table'''
+
+    # get connection
+    conexion = get_connection()
+
+    # cursor
+    with conexion.cursor() as cursor:
+
+        # For each row:
+        for line in data:
+
+        # execute command inserting data
+            cursor.execute("INSERT INTO ontology_descriptors(descriptor_id, ontology_id, descriptor, semantic_label, language, term_type) VALUES (%s, %s, %s, %s, %s, %s)", (line[0], line[1], line[2], line[3], line[4], line[5]))
+
+    # commit and return message
+    conexion.commit()
+    return(str(cursor.rowcount)+ " record(s) updated")

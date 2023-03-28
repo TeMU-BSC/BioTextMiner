@@ -344,7 +344,7 @@ def manage_file(file_name, archive_file):
         # print(ann_data[0:5])
 
         # Insert the documents names in the database
-        res = Document.insert_doczip_data(file[1])
+        # res = Document.insert_doczip_data(file[1])
 
     else:
         print('-The file is not valid for this action')

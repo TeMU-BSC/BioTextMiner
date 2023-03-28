@@ -86,7 +86,7 @@ CREATE TABLE annotations (
 
 -- TABLE : ontologies
 CREATE TABLE ontologies(
-    ontology_id VARCHAR(25) NOT NULL,
+    ontology_id INTEGER AUTO_INCREMENT,
     name VARCHAR(100),
     version VARCHAR(15),
     language VARCHAR(10),
@@ -100,8 +100,8 @@ CREATE TABLE ontologies(
 -- code_id references code_id in ontology_ontology_descriptors tables. Created manually
 CREATE TABLE normalizations (
     norm_id VARCHAR(25) NOT NULL,
-    ontology_id VARCHAR(25) NOT NULL,
-    code_id VARCHAR(25) NOT NULL, 
+    ontology_id INTEGER,
+    code_id INTEGER, 
     semantic_relation VARCHAR(50),
     PRIMARY KEY(norm_id)
 );
@@ -112,13 +112,13 @@ CREATE TABLE normalizations (
 -- descriptor_id : id in the csv file
 -- ontology_id references ontology_id in ontologies tables
 CREATE TABLE ontology_descriptors (
-    code_id VARCHAR(25) NOT NULL,
-    descriptor_id VARCHAR(25) NOT NULL,
-    ontology_id VARCHAR (25) NOT NULL, 
-    descriptor VARCHAR(250),
-    semantic_label VARCHAR(50),
+    code_id INTEGER AUTO_INCREMENT,
+    descriptor_id VARCHAR(200) NOT NULL,
+    ontology_id INTEGER, 
+    descriptor VARCHAR(500),
+    semantic_label VARCHAR(100),
     language VARCHAR(10),
-    term_type VARCHAR(20),
+    term_type VARCHAR(100),
     PRIMARY KEY (code_id)
 );
 
@@ -128,8 +128,8 @@ CREATE TABLE ontology_descriptors (
 -- code_id references the primmary key in the table ontology_descriptors . Created by the programme.
 -- ontology_id references ontology_id in ontologies table
 CREATE TABLE ontology_ontology_descriptors(
-    ontology_id VARCHAR(25) NOT NULL,
-    code_id VARCHAR(25) NOT NULL,
+    ontology_id INTEGER,
+    code_id INTEGER,
     PRIMARY KEY(ontology_id, code_id)
 );
 
