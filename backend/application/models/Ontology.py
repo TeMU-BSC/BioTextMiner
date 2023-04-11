@@ -128,3 +128,21 @@ def select_ontologies_by_descriptor(code_id):
     # fetchall and return the data
         data = cursor.fetchall()
         return data
+    
+
+# Function to select a ontology id by name
+# --------------------------------------------------------------------------------
+def select_ontologyid(name):
+    
+    # get connection
+    conexion = get_connection()
+
+    # cursor
+    with conexion.cursor() as cursor:
+
+        # execute command
+        cursor.execute("SELECT ontology_id FROM ontologies WHERE name = %s", name)
+
+    # commit and close the connection
+        data = cursor.fetchall()
+        return data

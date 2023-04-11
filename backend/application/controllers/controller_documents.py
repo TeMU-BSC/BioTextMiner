@@ -28,6 +28,9 @@ import zipfile
 import tarfile
 import rarfile
 
+# Import ElasticSearch
+from elasticsearch import Elasticsearch
+
 
 #----------------------------------------------------------------------------#
 # Routes
@@ -239,6 +242,9 @@ def select_documents_specility(specialityid):
 # Method GET
 
 
+# -----------------------------------------------------------------------
+# ZIP FILES MANAGEMENTS
+# -----------------------------------------------------------------------
 # Route to upload a zip file in the server
 # -----------------------------------------------------------------------
 @app.route('/upload', methods=['POST'])
@@ -271,21 +277,25 @@ def upload():
 
 
 # Function to extract the file data and store in the database
+# This function divides the files depending they are directories or files
 # -----------------------------------------------------------------------
 def extract_files(archive_file):
+
     # print(archive_file.namelist())
 
-    # For files in a directory
+    # For each files in the files list
     for file_name in archive_file.namelist():
         # print(file_name)
 
         # Check if the file is a directory or not
+
+        # If it is a directoy, manage the directory with a the "manage_directory" function.
         if os.path.isdir(file_name):
 
             # Get the names and insert in database
             manage_directory(file_name)
             
-        # If it not a directory, get data from this files and insert:
+        # If it not a directory, manage with the "manage_file" function:
         elif os.path.isfile(file_name):
 
             # Manage files. Annotations and txt
@@ -294,11 +304,13 @@ def extract_files(archive_file):
 
 
 
-# Function to get data of the directoires and store in the database
+# Function to get data of the directories names and store in the database
 # ---------------------------------------------------------------
 def manage_directory(file_name):
-    print('The file is a directory')
-
+    '''
+    Input Parameters: The directory filename
+    '''
+    
     # Get specialty names
     names = os.path.split(file_name)
 
@@ -310,35 +322,61 @@ def manage_directory(file_name):
     # print(name[0])
 
 
-# Function to get data from the directories
+# Function to get data from the files
 # -------------------------------------------------------------------------------------
 def manage_file(file_name, archive_file):
+    '''
+    Input parameters: - The file name
+                      - The archive file contains all the files (directory and subdirectories)
+    '''
 
-    print(' ')
-    print('This is a file')
+    # ------ For testing ------
+    #print(file_name)
+    #print(archive_file.namelist())
 
+    # Split file name, 0 position is the directory and 1 position the file
     file = file_name.split("/")
 
-
-    # Check if the file is a txt or ann:
-    # If the file is a txt:
+    # Manage file depending on the file extension (txt or ann)
     if file_name.endswith('.txt'):
-        print('-The file is a txt file')
+       
+        # Insert data in Documents table and get id of the last insert
+        txt_id = Document.insert_doc_name(file[1])
 
-        # Get data from txt files
-        txt_data = manage_text(archive_file, file_name)
-        # print(txt_data)
+        if len(txt_id)==0:
+            message = 'Required already satisfied'
 
+        else:
+            # TXT ID
+            # Convert id to str
+            txt_id_str = "".join(str(x) for x in txt_id[0])
+
+            # TXT DATA
+            # Get data from txt files
+            txt_data = manage_text(archive_file, file_name)
+
+            # Convert to str
+            txt_data2 = str(txt_data, 'UTF-8')
+
+            # TXT NAME
+            # Get document name
+            txt_name = file[1]
+
+            # INSERT DATA IN ELASTIC SEARCH
+            result = manage_elastic(txt_id_str, txt_name, txt_data2, "yes")
+    
         # Insert the documents names in the database
-        res = Document.insert_doczip_data(file[1])
+        #res = Document.insert_doczip_data(file[1])
+
 
     # If the file is an annotation file:
     elif file_name.endswith('.ann'):
-        print('-The file is an annotation file')
+        pass
+        # print('-The file is an annotation file')
 
         # Get annotation data and insert
-        ann_data = manage_annotations(archive_file, file_name)
-        result = Annotation.insert_annzip_data(ann_data)
+        #ann_data = manage_annotations(archive_file, file_name)
+        #result = Annotation.insert_annzip_data(ann_data)
 
         # To check
         # print(ann_data[0:5])
@@ -357,10 +395,10 @@ def manage_text(archive_file, file_name):
     '''
     Manages the txt files, extract the data in these files
     - Input parameters: archive file is the file received
-                        file name is the name of all the files in the folder received
+                        file name is the name of each file in the received folder 
     - Output parameters: data extracted from txt files.
     '''
-    
+
     # Open the archive file
     with archive_file.open(file_name) as file:
 
@@ -371,7 +409,7 @@ def manage_text(archive_file, file_name):
         return file_data
 
 
-# Function to parse the txt files data
+# Function to parse the annotation files data
 # --------------------------------------------------------------------------------------
 def manage_annotations(archive_file, file_name):
     '''
@@ -417,11 +455,87 @@ def manage_annotations(archive_file, file_name):
 
                 result.append(data)
 
-                # To check
-                # print(result)
             
             return result
 
 # ------------------------- For testing zip file -------------------------
 # Test in terminal
 # curl -i -X POST -F name=prueba -F file=@file.zip "localhost:5000/upload"
+# -----------------------------------------------------------------------
+
+
+# -----------------------------------------------------------------------
+# ELASTIC SEARCH 
+# -----------------------------------------------------------------------
+# Define the Elastic Search Client class
+# -----------------------------------------------------------------------
+def elastic():
+
+    class ElasticsearchClient:
+        def __init__(self) -> None:
+            self._client: Optional[Elasticsearch] = None
+            self.indices: List[str] = []
+
+        @property
+        def client(self) -> Elasticsearch:
+            if self._client is None:
+                self._client = Elasticsearch("http://localhost:9200",basic_auth=('elastic', 'PlanTL-2019'))
+            return self._client
+
+        def parallel_bulk(self, *args, **kwargs):
+            """
+            See https://elasticsearch-py.readthedocs.io/en/master/helpers.html#elasticsearch.helpers.parallel_bulk
+            for details, this is just a wrapper method to unify the helper method and client.
+            `parallel_bulk` returns a generator, need to `deque` it to consume.
+            """
+            
+            deque(_parallel_bulk(self.client, *args, **kwargs), maxlen=0)
+
+    ec = ElasticsearchClient()
+
+    return ec
+
+# Function to insert data in ElasticSearch
+# -----------------------------------------------------------------------
+def manage_elastic(id, name, data, printed):
+
+    # Define var
+    ec = elastic()
+
+    # Create index, with name "documents" if not exists
+    if ec.indices.exists("documents"):
+        pass
+    else:
+        ec.client.indices.create(index="documents", ignore=400)
+
+    # Delete index, with name "documents"
+    # ec.client.options(ignore_status=[400,404]).indices.delete(index='documents')
+
+    # Delete data of a document - TO CHECK
+    # ec.delete_by_query(index=documents, body={"query": {"match_all": {}}})
+
+    # Create dict
+    mydict = {}
+
+    # Add data to the dict
+    mydict["id"] = id
+    mydict["name"] = name
+    mydict["data"] = data
+
+    # Add data to index
+    ec.client.index(index="documents",id=mydict["id"],document=mydict,)
+
+    # print data, if required
+    if printed == "yes":
+        results = ec.client.search(index="documents", query={'match_all' : {}})
+        print(results)   
+    else:
+        pass 
+
+
+
+# Route to search documents in ElasticSearch
+# -----------------------------------------------------------------------
+@app.route('/search-elastic', methods=['POST'])
+def search():
+    pass

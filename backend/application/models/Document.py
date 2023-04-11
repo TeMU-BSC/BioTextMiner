@@ -195,21 +195,21 @@ def insert_doczip_data(name:str):
 
         # If the result is None, means that there is no document with this name stored in the database.
         if resultado is None:
-            print("Database messsage : The document does not exist in the database")
+            message = "Database messsage : The document does not exist in the database"
 
             # Execute insert command to insert the document if not exists
             if name.endswith('txt') or name.endswith('ann'):
                 cursor.execute("INSERT INTO documents(name) VALUES (%s)",(name))
             else:
-                print('Database message : The file extension is not txt or ann.')
+                message = 'Database message : The file extension is not txt or ann.'
 
         else:
-            print("Database messsage : The document already exists in the database")
+            message = "Database messsage : The document already exists in the database"
             
 
     # commit and return message
     conexion.commit()
-    return(str(cursor.rowcount)+ " record(s) updated")
+    return(str(cursor.rowcount)+ " record(s) updated", message)
 
 
 
@@ -234,3 +234,55 @@ def select_documentid(name:str):
     # commit and close the connection
         data = cursor.fetchall()
         return data
+
+
+
+
+# Function to insert data in documents table
+# ---------------------------------------------------------------------------------
+def insert_doc_name(name:str):
+    '''
+    Input parameters: 
+        name: name of the document
+    '''
+
+    # get connection
+    conexion = get_connection()
+
+    # cursor
+    with conexion.cursor() as cursor:
+
+        # execute command
+        # Check if the document exists in the database
+        cursor.execute("SELECT text_id FROM documents WHERE name = %s", name)
+        result = cursor.fetchone()
+
+        # If the result is None, means that there is no document with this name stored in the database.
+        if result is None:
+            # print("Database messsage : The document does not exist in the database")
+
+            # Execute insert command to insert the document if not exists
+            if name.endswith('txt'):
+                cursor.execute("INSERT INTO documents(name) VALUES (%s)",(name))
+
+                # Get the id of the last insert.
+                cursor.execute("SELECT LAST_INSERT_ID()")
+
+            else:
+                message = 'Database message : The file extension is not txt.'
+                
+        else:
+            message = "Database messsage : The document already exists in the database"
+            
+
+    # commit and return message
+    conexion.commit()
+    data = cursor.fetchall()
+
+    # if len(data) == 0:
+    #     print("No se encontraron filas.")
+    # else:
+    #     print("Se encontraron filas.")
+
+    return data
+    #return(str(cursor.rowcount)+ " record(s) updated")

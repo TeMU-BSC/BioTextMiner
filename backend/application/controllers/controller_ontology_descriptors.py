@@ -14,7 +14,8 @@
 from application import app
 from flask import Flask,jsonify,request
 
-# Import documents model
+# Import ontology and ontology descriptors model
+import application.models.Ontology as Ontology
 import application.models.OntologyDescriptors as OntologyDescriptors
 
 # Import csv
