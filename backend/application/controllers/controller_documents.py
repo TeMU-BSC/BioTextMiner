@@ -508,12 +508,6 @@ def manage_elastic(id, name, data, printed):
     else:
         ec.client.indices.create(index="documents", ignore=400)
 
-    # Delete index, with name "documents"
-    # ec.client.options(ignore_status=[400,404]).indices.delete(index='documents')
-
-    # Delete data of a document - TO CHECK
-    # ec.delete_by_query(index=documents, body={"query": {"match_all": {}}})
-
     # Create dict
     mydict = {}
 
@@ -538,4 +532,94 @@ def manage_elastic(id, name, data, printed):
 # -----------------------------------------------------------------------
 @app.route('/search-elastic', methods=['POST'])
 def search():
-    pass
+
+    es = elastic()
+
+    word = request.json["word"]
+
+    search_term = word
+
+    # Define los parámetros de búsqueda
+    search_params = {
+        "query": {
+            "match": {
+                "texto": search_term
+            }
+        }
+    }
+
+
+    # Realiza la búsqueda
+    results = es.client.search(index="documents", query={'match_all' : {}})
+
+    #search_result = es.client.search(index="documents", body=search_params)
+    print(results)
+
+
+    # Imprime los resultados
+    #print(search_result['hits']['hits'])
+
+    #print(search_result)
+
+
+# Route to search documents in ElasticSearch
+# -----------------------------------------------------------------------
+@app.route('/search-elasticc', methods=['GET'])
+def searchh():
+
+    class ElasticsearchClient:
+        def __init__(self) -> None:
+            self._client: Optional[Elasticsearch] = None
+            self.indices: List[str] = []
+
+        @property
+        def client(self) -> Elasticsearch:
+            if self._client is None:
+                self._client = Elasticsearch("http://localhost:9200",basic_auth=('elastic', 'PlanTL-2019'))
+            return self._client
+
+        def parallel_bulk(self, *args, **kwargs):
+            """
+            See https://elasticsearch-py.readthedocs.io/en/master/helpers.html#elasticsearch.helpers.parallel_bulk
+            for details, this is just a wrapper method to unify the helper method and client.
+            `parallel_bulk` returns a generator, need to `deque` it to consume.
+            """
+            
+            deque(_parallel_bulk(self.client, *args, **kwargs), maxlen=0)
+
+    ec = ElasticsearchClient()
+
+
+    # Check ElasticSearch Cluster Health
+    # try:
+    #     ec = ElasticsearchClient()
+    #     ec.client.cluster.health()
+        
+    # # If connection error, raise exeption of Runt time error
+    # except ConnectionError as e:
+    #     raise RuntimeError("Elasticsearch is not running") from e
+
+    # Realiza la búsqueda
+    results = ec.client.search(index="documents", query={'match_all' : {}})
+    # print(results)
+    return jsonify(results)
+
+    @app.route('/search', methods=['POST'])
+    def searc():
+
+        ec = elastic()
+
+        keyword = request.json['keyword']
+
+        body = {
+            "query": {
+                "multi_match": {
+                    "query": keyword,
+                    "fields": ["content", "title"]
+                }
+            }
+        }
+
+        res = ec.client.search(index="documents", doc_type="title", body=body)
+
+        return jsonify(res['hits']['hits'])
