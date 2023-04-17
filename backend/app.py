@@ -14,6 +14,7 @@ This module contains the BioTextMiner API.
 # ----------------------------------------------------------------------
 from flask import Flask
 from application import app
+from flask_cors import CORS
 
 # Configparser settings
 # ----------------------------------------------------------------------
@@ -25,5 +26,6 @@ parameters.read('./configuration.cfg')
 
 # Main
 # ----------------------------------------------------------------------
-if __name__=="__main__":                  
+if __name__=="__main__":    
+    CORS(app)                  
     app.run(debug=True) 

@@ -21,6 +21,7 @@ import application.models.Specialty as Specialty
 
 # Os module
 import os
+import glob
 
 # Zip File Extraction
 from io import BytesIO
@@ -30,6 +31,7 @@ import rarfile
 
 # Import ElasticSearch
 from elasticsearch import Elasticsearch
+
 
 
 #----------------------------------------------------------------------------#
@@ -285,7 +287,6 @@ def extract_files(archive_file):
 
     # For each files in the files list
     for file_name in archive_file.namelist():
-        # print(file_name)
 
         # Check if the file is a directory or not
 
@@ -297,7 +298,8 @@ def extract_files(archive_file):
             
         # If it not a directory, manage with the "manage_file" function:
         elif os.path.isfile(file_name):
-
+            # print('entro')
+            # print(file_name)
             # Manage files. Annotations and txt
             manage_file(file_name, archive_file)
 
@@ -336,12 +338,12 @@ def manage_file(file_name, archive_file):
 
     # Split file name, 0 position is the directory and 1 position the file
     file = file_name.split("/")
-
+    #print(file)
     # Manage file depending on the file extension (txt or ann)
     if file_name.endswith('.txt'):
        
         # Insert data in Documents table and get id of the last insert
-        txt_id = Document.insert_doc_name(file[1])
+        txt_id = Document.insert_doc_name(file[-1])
 
         if len(txt_id)==0:
             message = 'Required already satisfied'
@@ -503,10 +505,11 @@ def manage_elastic(id, name, data, printed):
     ec = elastic()
 
     # Create index, with name "documents" if not exists
-    if ec.indices.exists("documents"):
-        pass
-    else:
-        ec.client.indices.create(index="documents", ignore=400)
+    # if ec.indices.exists("documents"):
+    #     pass
+    # else:
+    #     ec.client.indices.create(index="documents", ignore=400)
+    ec.client.indices.create(index="documents", ignore=400)
 
     # Create dict
     mydict = {}
@@ -604,22 +607,23 @@ def searchh():
     # print(results)
     return jsonify(results)
 
-    @app.route('/search', methods=['POST'])
-    def searc():
 
-        ec = elastic()
+@app.route('/search', methods=['POST'])
+def searc():
 
-        keyword = request.json['keyword']
+    ec = elastic()
 
-        body = {
-            "query": {
-                "multi_match": {
-                    "query": keyword,
-                    "fields": ["content", "title"]
-                }
+    keyword = request.json['keyword']
+
+    body = {
+        "query": {
+            "multi_match": {
+                "query": keyword,
+                "fields": ["content", "title"]
             }
         }
+    }
 
-        res = ec.client.search(index="documents", doc_type="title", body=body)
+    res = ec.client.search(index="documents", doc_type="title", body=body)
 
-        return jsonify(res['hits']['hits'])
+    return jsonify(res['hits']['hits'])

@@ -22,7 +22,7 @@ def get_user(username, password):
 
     # get connection
     conexion = get_connection()
-    
+    # print(username, password)
     # cursor
     with conexion.cursor() as cursor:
 
