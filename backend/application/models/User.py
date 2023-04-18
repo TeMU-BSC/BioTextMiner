@@ -22,13 +22,38 @@ def get_user(username, password):
 
     # get connection
     conexion = get_connection()
-    # print(username, password)
+
     # cursor
     with conexion.cursor() as cursor:
 
         # execute command
-        cursor.execute ('SELECT * FROM users WHERE username=%s AND password=%s',username, password)        
-        
+        cursor.execute ('SELECT * FROM users WHERE username=%s AND password=%s', (username, password))        
+
         #fetch data and return
         data = cursor.fetchone()
         return data
+    
+# Function to register a user
+# ---------------------------------------------------------------------------------
+def insert_user(name, surname, email, username, password):
+    '''
+    Input parameters: 
+                    user's data
+    '''
+
+    # Guest role by default
+    role = 'guest'
+
+    # get connection
+    conexion = get_connection()
+
+    # cursor
+    with conexion.cursor() as cursor:
+
+        # execute command
+        cursor.execute("INSERT INTO users(username, password, name, surname, email, role) VALUES (%s, %s, %s, %s, %s, %s)",
+                    (username, password, name, surname, email, role))
+
+    # commit and return message
+    conexion.commit()
+    return(str(cursor.rowcount)+ " record(s) updated")
