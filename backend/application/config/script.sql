@@ -9,6 +9,21 @@ use fct;
 
 
 -- CREATE TABLES
+-- TABLE : users
+-- Description : Stores the users information. 
+-- Necessary for login and register.
+CREATE TABLE users (
+    user_id INTEGER NOT NULL AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL unique,
+    password VARCHAR(50) NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    surname VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    role VARCHAR(50) NOT NULL,
+    PRIMARY KEY (user_id)
+);
+
+-- CREATE TABLES
 -- TABLE : documents
 CREATE TABLE documents(
     text_id INTEGER AUTO_INCREMENT,
@@ -226,3 +241,10 @@ insert into ontology_ontology_descriptors values(2, 5);
 insert into ontology_ontology_descriptors values(3, 4);
 insert into ontology_ontology_descriptors values(4, 4);
 insert into ontology_ontology_descriptors values(2, 3);
+
+-- Table : users
+INSERT INTO users(username, password, name, surname, email, role) VALUES('user01', 'pass01', 'Juan', 'Antonio', 'user1@gmail.com', 'guest');
+INSERT INTO users(username, password, name, surname, email, role) VALUES('user02', 'pass02', 'Joana', 'Perez', 'user2@gmail.com', 'annotator');
+INSERT INTO users(username, password, name, surname, email, role) VALUES('user03', 'pass03', 'Jose', 'Martinez', 'user3@gmail.com', 'admin');
+INSERT INTO users(username, password, name, surname, email, role) VALUES('user04', 'pass04', 'Mireia', 'Perez', 'user4@gmail.com', 'guest');
+INSERT INTO users(username, password, name, surname, email, role) VALUES('user05', 'pass05', 'Bob', 'Martinez', 'user5@gmail.com', 'annotator');
