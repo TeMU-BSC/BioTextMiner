@@ -79,6 +79,9 @@ def insert_doc_data(textid:str, date:str, author:str, source:str, collection:str
         cursor.execute("INSERT INTO documents(text_id, date, author, source, collection, language) VALUES (%s, %s, %s, %s, %s, %s)",
                     (textid, date, author, source, collection, language))
 
+
+    #gestionar elastic search. obtener id del ultimo insert
+    
     # commit and return message
     conexion.commit()
     return(str(cursor.rowcount)+ " record(s) updated")

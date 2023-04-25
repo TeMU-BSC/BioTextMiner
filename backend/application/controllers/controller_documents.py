@@ -33,7 +33,6 @@ import rarfile
 from elasticsearch import Elasticsearch
 
 
-
 #----------------------------------------------------------------------------#
 # Routes
 #----------------------------------------------------------------------------#
@@ -85,15 +84,16 @@ def insert_documents_data():
     # try to insert a document data, if not possible return an error message as a result
     try:
         # Get data in json format
-        text_id = request.json["text_id"]
-        date = request.json["date"]
+        # text_id = request.json["text_id"] # id no hace falta en el form
+        date = request.json["date"] # fecha de insertado, actual
         author = request.json["author"]
         source = request.json["source"]
         collection = request.json["collection"]
         language = request.json["language"]
+        text = request.json["text"]
 
         # Use the function in model
-        result = Document.insert_doc_data(text_id, date, author, source, collection, language)
+        result = Document.insert_doc_data(date, author, source, collection, language, text)
     
         # If the insert was successful, return the okey msg
         return jsonify({"result":"okey inserting data","response":result})
@@ -298,12 +298,9 @@ def extract_files(archive_file):
             
         # If it not a directory, manage with the "manage_file" function:
         elif os.path.isfile(file_name):
-            # print('entro')
-            # print(file_name)
+
             # Manage files. Annotations and txt
             manage_file(file_name, archive_file)
-
-
 
 
 # Function to get data of the directories names and store in the database
@@ -336,9 +333,9 @@ def manage_file(file_name, archive_file):
     #print(file_name)
     #print(archive_file.namelist())
 
-    # Split file name, 0 position is the directory and 1 position the file
+    # Split file name, 0 position is the directory and -1 position the file
     file = file_name.split("/")
-    #print(file)
+
     # Manage file depending on the file extension (txt or ann)
     if file_name.endswith('.txt'):
        
@@ -373,7 +370,24 @@ def manage_file(file_name, archive_file):
 
     # If the file is an annotation file:
     elif file_name.endswith('.ann'):
-        pass
+        
+        file_name_only = (os.path.splitext(file_name)[0])
+        new = (file_name_only + '.txt')
+
+        isFile = os.path.isfile(new)
+        print(isFile)
+
+        not_included = []
+
+        if(isFile)==False:
+            not_included.append(file_name)
+
+
+        print(not_included)
+
+
+
+        # verificar, coger el nombre i verificar si 
         # print('-The file is an annotation file')
 
         # Get annotation data and insert
@@ -425,7 +439,7 @@ def manage_annotations(archive_file, file_name):
     
     # Get the text_id of the document
     document_id = Document.select_documentid(file[1])
-
+    corpus = {"labels":[]}
     # print(document_id)
 
     # Open the archive file
@@ -449,13 +463,15 @@ def manage_annotations(archive_file, file_name):
                 end_span = text_span[2]
 
                 attributes = line[2]
-                text_id = document_id
 
                 # Append the data in a list
                 # data = mark, ann_text, start_span, end_span, attributes
-                data = mark, ann_text, start_span, end_span, attributes, text_id
+                data = mark, ann_text, start_span, end_span, attributes, document_id
 
                 result.append(data)
+                if ann_text not in corpus.labels:
+                    corpus.labels.append(ann_text)
+
 
             
             return result

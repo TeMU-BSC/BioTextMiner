@@ -68,15 +68,13 @@ def insert_corpus_data():
 
     try:
         # Get data in json format
-        corpus_id = request.json["corpus_id"]
         corpus_name = request.json["corpus_name"]
         labels = request.json["labels"]
         description = request.json["description"]
         version = request.json["version"]
-        n_docs = request.json["n_docs"]
 
         # Use the function in model
-        result = Corpus.insert_cor_data(corpus_id, corpus_name, labels, description, version, n_docs)
+        result = Corpus.insert_cor_data(corpus_name, labels, description, version)
         
         # If the insert was successful, return the okey msg
         return jsonify({"result":"okey inserting data","response":result})
@@ -91,12 +89,10 @@ def insert_corpus_data():
 # Method: POST
 
 # {
-#   "corpus_id" : "12",
 #   "corpus_name":"corpus_dishf",
 #   "labels":"label11",
 #   "description":"Corpus description",
-#   "version":"2.0",
-#   "n_docs":"2"
+#   "version":"2.0"
 # }
 # -----------------------------------------
 

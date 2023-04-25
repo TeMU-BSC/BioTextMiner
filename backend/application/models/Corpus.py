@@ -51,7 +51,7 @@ def select_where(corpusid):
 
 # Function to insert data in corpus table
 # ---------------------------------------------------------------------------------
-def insert_cor_data(corpus_id, corpus_name, labels, description, version, n_docs):
+def insert_cor_data(corpus_name, labels, description, version):
     '''Input parameters: data to insert in the table'''
 
     # get connection
@@ -61,8 +61,8 @@ def insert_cor_data(corpus_id, corpus_name, labels, description, version, n_docs
     with conexion.cursor() as cursor:
 
         # execute query
-        cursor.execute("INSERT INTO corpus(corpus_id, corpus_name, labels, description, version, n_docs) VALUES (%s, %s, %s, %s, %s, %s)",
-                    (corpus_id, corpus_name, labels, description, version, n_docs))
+        cursor.execute("INSERT INTO corpus(corpus_name, labels, description, version, n_docs) VALUES (%s, %s, %s, %s, '0')",
+                    (corpus_name, labels, description, version))
     
     # commit and return message
     conexion.commit()
