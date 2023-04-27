@@ -4,10 +4,13 @@ import NavBar from '@/components/navbar';
 
 const FileUploadForm: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
+  const [fileName, setFileName] = useState('');
+
 
   const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       setFile(event.target.files[0]);
+      setFileName(event.target.files[0].name);
     }
   };
 
@@ -27,6 +30,7 @@ const FileUploadForm: React.FC = () => {
           'Content-Type': 'multipart/form-data'
         }
       });
+      setFileName(file.name);
       console.log(response);
     } catch (error) {
       console.error(error);
@@ -55,7 +59,7 @@ const FileUploadForm: React.FC = () => {
           />
         </svg>
         <span className="mt-2 text-base leading-normal">
-          Select a file or drag and drop it here
+          {fileName ? fileName : 'Select a file or drag and drop it here'}
         </span>
         <input
           type="file"

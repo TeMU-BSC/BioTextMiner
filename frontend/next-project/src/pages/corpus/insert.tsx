@@ -4,12 +4,10 @@ import NavBar from '@/components/navbar';
 
 const CorpusForm = () => {
   const [formData, setFormData] = useState({
-    corpus_id: '',
     corpus_name: '',
     labels: '',
     description: '',
     version: '',
-    n_docs: ''
   });
 
   const [formMessage, setFormMessage] = useState('');
@@ -31,12 +29,10 @@ const CorpusForm = () => {
       setFormMessage(response.data.result);
       // reset the form after successful submit
       setFormData({
-        corpus_id: '',
         corpus_name: '',
         labels: '',
         description: '',
         version: '',
-        n_docs: ''
       });
     } catch (error) {
       console.error(error);
@@ -48,21 +44,6 @@ const CorpusForm = () => {
     <NavBar></NavBar>
     <form onSubmit={handleSubmit} className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-md">
     <h1 className='text-4xl font-bold m-2'>Insert Corpus</h1>
-
-      <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2" htmlFor="corpus_id">
-          Corpus ID:
-        </label>
-        <input
-          className="appearance-none border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline  bg-gray-200"
-          id="corpus_id"
-          type="text"
-          name="corpus_id"
-          value={formData.corpus_id}
-          onChange={handleChange}
-          disabled
-        />
-      </div>
       <div className="mb-4">
         <label className="block text-gray-700 font-bold mb-2" htmlFor="corpus_name">
           Corpus name:

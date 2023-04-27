@@ -16,6 +16,9 @@ const DocumentsPage = () => (
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition-all duration-500 transform hover:scale-110">
             <Link href='/documents/upload'>Upload a zip Now</Link>
           </button>
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition-all duration-500 transform hover:scale-110">
+            <Link href='/documents/insert'>Create a document</Link>
+          </button>
         </div>
       </div>
     </div>

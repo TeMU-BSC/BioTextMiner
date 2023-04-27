@@ -90,11 +90,11 @@ def insert_documents_data():
         source = request.json["source"]
         collection = request.json["collection"]
         language = request.json["language"]
-        text = request.json["text"]
+        text = request.json["text"] # en elastic search
 
         # Use the function in model
         result = Document.insert_doc_data(date, author, source, collection, language, text)
-    
+
         # If the insert was successful, return the okey msg
         return jsonify({"result":"okey inserting data","response":result})
     
