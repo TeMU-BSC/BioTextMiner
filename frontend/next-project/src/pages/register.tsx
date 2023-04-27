@@ -1,6 +1,7 @@
 import NavBar from '../components/navbar'
 import { useState } from 'react';
 import Link from 'next/link';
+import Footer from '@/components/footer';
 
 
 export default function RegisterPage() {
@@ -60,7 +61,7 @@ return (
         </div>
         <div>
           <label htmlFor="surname" className="text-gray-700 font-bold mb-2">
-          surname
+          Surname
           </label>
           <input
             type="surname"
@@ -125,6 +126,7 @@ return (
           </div>
         </div>
       </form>
+      <Footer></Footer>
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import NavBar from '@/components/navbar';
+import Footer from '@/components/footer';
 
 const FileUploadForm: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -75,7 +76,7 @@ const FileUploadForm: React.FC = () => {
       </button>
     </form>
 
-        
+    <Footer></Footer>
     </div>
     </>
   );

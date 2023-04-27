@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import NavBar from '@/components/navbar';
+import Footer from '@/components/footer';
 
 export default function Tabla() {
   const [data, setData] = useState([]);
@@ -53,6 +54,7 @@ export default function Tabla() {
           </TableBody>
         </Table>
       </TableContainer>
+      <Footer></Footer>
     </div>
     </>
   );

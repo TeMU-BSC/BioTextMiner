@@ -1,5 +1,6 @@
 import NavBar from '../components/navbar'
 import Link from 'next/link';
+import Footer from '@/components/footer';
 
 const DocumentsPage = () => (
   <div>
@@ -22,6 +23,7 @@ const DocumentsPage = () => (
         </div>
       </div>
     </div>
+    <Footer></Footer>
   </div>
 )
 

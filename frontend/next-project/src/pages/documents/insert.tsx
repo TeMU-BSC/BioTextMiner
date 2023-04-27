@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import NavBar from '@/components/navbar';
+import Footer from '@/components/footer';
 
 const CorpusForm = () => {
   const [formData, setFormData] = useState({
@@ -153,6 +154,7 @@ const CorpusForm = () => {
       {formMessage && <p className="text-center text-green-500 m-2">{formMessage}</p>}
 
     </form>
+    <Footer></Footer>
     </>
   );
 };

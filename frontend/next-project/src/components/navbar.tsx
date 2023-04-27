@@ -34,7 +34,7 @@ const NavBar = () => {
 
   return (
     
-    <nav className="bg-gray-900 text-white">
+    <nav className="bg-gray-900 text-white py-px">
 
       {/* Max width */}
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
@@ -47,35 +47,35 @@ const NavBar = () => {
             className="rounded"
             src="/../public/bsc.jpg"
             alt="Picture of the author"
-            width={72}
+            width={75}
             height={10}
           />
 
           {/* Navigation links */}
           <div className="hidden sm:block sm:ml-6">
             <div className="flex">
-              <Link href="/" className="px-3 py-2 rounded-md text-sm font-medium">
+              <Link href="/" className="px-3 py-2 rounded-md text-base font-medium">
                 Home
               </Link>
-              <Link href="/corpus" className="ml-4 px-3 py-2 rounded-md text-sm font-medium">
+              <Link href="/corpus" className="ml-4 px-3 py-2 rounded-md text-base font-medium">
                 Corpus
               </Link>
-              <Link href="/documents" className="ml-4 px-3 py-2 rounded-md text-sm font-medium">
+              <Link href="/documents" className="ml-4 px-3 py-2 rounded-md text-base font-medium">
                 Documents
               </Link>
 
               {/* Show Login/Register or Logout depending on isLogged or not */}
               {/* <div> */}
                 {user ? (
-                  <button className="ml-4 px-3 py-2 rounded-md text-sm font-medium" onClick={handleLogout}>
+                  <button className="ml-4 px-3 py-2 rounded-md text-base font-medium" onClick={handleLogout}>
                       Logout
                 </button>
                 ) : (
                   <>
-                  <Link href="/login" className="ml-4 px-3 py-2 rounded-md text-sm font-medium">
+                  <Link href="/login" className="ml-4 px-3 py-2 rounded-md text-base font-medium">
                   Login
                   </Link>
-                  <Link href="/register" className="ml-4 px-3 py-2 rounded-md text-sm font-medium ">
+                  <Link href="/register" className="ml-4 px-3 py-2 rounded-md text-base font-medium ">
                     Register
                   </Link>
                   </>

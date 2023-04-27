@@ -1,6 +1,7 @@
 import NavBar from '../components/navbar'
 import Link from 'next/link';
 import { Card, CardContent, Typography } from '@mui/material';
+import Footer from '@/components/footer';
 
 const CorpusPage = () => (
   <div>
@@ -25,6 +26,7 @@ const CorpusPage = () => (
 
       </div>
     </div>
+    <Footer></Footer>
   </div>
 )
 
