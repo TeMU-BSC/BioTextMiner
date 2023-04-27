@@ -57,19 +57,21 @@ const NavBar = () => {
               <Link href="/" className="px-3 py-2 rounded-md text-base font-medium">
                 Home
               </Link>
-              <Link href="/corpus" className="ml-4 px-3 py-2 rounded-md text-base font-medium">
-                Corpus
-              </Link>
-              <Link href="/documents" className="ml-4 px-3 py-2 rounded-md text-base font-medium">
-                Documents
-              </Link>
 
               {/* Show Login/Register or Logout depending on isLogged or not */}
               {/* <div> */}
                 {user ? (
+                <div>
+                  <Link href="/corpus" className="ml-4 px-3 py-2 rounded-md text-base font-medium">
+                  Corpus
+                  </Link>
+                  <Link href="/documents" className="ml-4 px-3 py-2 rounded-md text-base font-medium">
+                    Documents
+                  </Link>
                   <button className="ml-4 px-3 py-2 rounded-md text-base font-medium" onClick={handleLogout}>
-                      Logout
-                </button>
+                        Logout
+                  </button>
+                </div>
                 ) : (
                   <>
                   <Link href="/login" className="ml-4 px-3 py-2 rounded-md text-base font-medium">
@@ -80,7 +82,6 @@ const NavBar = () => {
                   </Link>
                   </>
                 )}
-              {/* </div>    */}
 
             </div>
 

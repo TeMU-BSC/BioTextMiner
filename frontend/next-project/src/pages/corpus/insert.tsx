@@ -108,7 +108,9 @@ const CorpusForm = () => {
       {formMessage && <p className="text-center text-green-500 m-2">{formMessage}</p>}
 
     </form>
-    <Footer></Footer>
+    <div className='absolute inset-x-0 bottom-0'>
+      <Footer></Footer>
+    </div>    
     </>
   );
 };
