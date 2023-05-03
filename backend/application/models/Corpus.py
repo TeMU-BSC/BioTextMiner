@@ -24,7 +24,7 @@ def select_corpus():
     with conexion.cursor() as cursor:
 
         # execute command
-        cursor.execute("select * from corpus")
+        cursor.execute("select * from corpus limit 3")
 
     # fetchall and return the data
         data = cursor.fetchall()

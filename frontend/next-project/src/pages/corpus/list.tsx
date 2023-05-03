@@ -3,13 +3,14 @@ import axios from 'axios';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import NavBar from '@/components/navbar';
 import Footer from '@/components/footer';
+import Link from 'next/link';
 
 export default function Tabla() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios(
+      const result = await axios.get(
         'http://localhost:5000/corpus'
       );
 
@@ -44,7 +45,11 @@ export default function Tabla() {
                 <TableCell component="th" scope="row">
                   {row[0]}
                 </TableCell>
-                <TableCell align="right">{row[1]}</TableCell>
+                <TableCell align="right">
+                  <Link href={`/corpus/${row[0]}`}>
+                    {row[1]}
+                  </Link>
+                </TableCell>
                 <TableCell align="right">{row[2]}</TableCell>
                 <TableCell align="right">{row[3]}</TableCell>
                 <TableCell align="right">{row[4]}</TableCell>
