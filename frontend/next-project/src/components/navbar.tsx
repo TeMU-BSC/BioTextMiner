@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
+import router from 'next/router';
 
 
 const NavBar = () => {
@@ -27,9 +29,13 @@ const NavBar = () => {
 
     // Remove the user data from local storage
     localStorage.removeItem('user');
+    
+    // Remove the cookies
+    Cookies.remove("loggedin");
+    // Cookies.remove("userId");
 
     // Refresh the page to reflect the logout state
-    window.location.reload();
+    router.push('/');
   };
 
   return (

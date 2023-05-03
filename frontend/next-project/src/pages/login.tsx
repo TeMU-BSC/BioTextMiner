@@ -1,14 +1,40 @@
+/**
+   * @file signin.tsx Typescript file. 
+   * @description Login page with form and fetching with login api
+   * @version 1.2
+   * @author Siddique Muhammad, Denys Chorny
+*/
+
+/**
+ * @imports
+ * NavBar component
+ * Footer 
+ * React library
+ * Link from next/link
+ * Cookies
+ */
 import Footer from '@/components/footer'
 import NavBar from '@/components/navbar'
 import Link from 'next/link'
 import { useState } from 'react'
+import Cookies from "js-cookie";
 
+
+/**
+ * @function Login
+ * Definition of the function
+ * @returns html page
+ */
 export default function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [mis, setMis] = useState('')
 
+  /**
+   * Handle submit
+   * @param e 
+   */
   const handleSubmit = async (e:any) => {
     e.preventDefault()
 
@@ -18,17 +44,27 @@ export default function Login() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password })
     })
+
     const data = await res.json()
+
     if (data.error || data.err=="true" || data.data==null) {
       setError(data.error)
       setMis("Error")
     }  else {
       // console.log(data.mis)
       localStorage.setItem('user', username)
+
+      // Set cookie for logged session
+      Cookies.set("loggedin", "true");
+      // Cookies.set("userId", "true");
+      console.log(data)
+      // Cookies.set("userId", data.user.user_id);
+      
       window.location.href = '/'
     } 
   }
   
+  // Return html
   return (
     <div>
     <NavBar></NavBar>
