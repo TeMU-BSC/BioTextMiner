@@ -632,15 +632,18 @@ def searc():
     keyword = request.json['keyword']
 
     body = {
-        "query": {
-            "multi_match": {
-                "query": keyword,
-                "fields": ["content", "title"]
+            "from": 45, 
+            "size": 10,
+            "query": {
+                "fuzzy": {
+                "data": {
+                    "value": keyword
+                }
+                }
             }
-        }
-    }
+            }
 
-    res = ec.client.search(index="documents", doc_type="title", body=body)
+    res = ec.client.search(index="documents", body=body)
 
     return jsonify(res['hits']['hits'])
 # ---------------------------- TODO -------------------------------------

@@ -76,8 +76,8 @@ const FileUploadForm: React.FC = () => {
       </button>
     </form>
 
-    <Footer></Footer>
     </div>
+    <Footer></Footer>
     </>
   );
 };

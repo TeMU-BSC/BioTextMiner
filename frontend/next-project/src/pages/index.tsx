@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Footer from '@/components/footer';
 
 const HomePage = () => (
-  <div>
+  <div className='flex flex-col h-screen'>
     <NavBar />
     <div className="flex justify-center items-center m-9 w-8/12 mx-auto">
       <div className="text-center">
@@ -27,7 +27,9 @@ const HomePage = () => (
         </div>
       </div>
     </div>
+    <div className='absolute inset-x-0 bottom-0'>
     <Footer></Footer>
+    </div>
   </div>
 )
 
