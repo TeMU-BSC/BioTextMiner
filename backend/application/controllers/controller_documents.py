@@ -546,7 +546,7 @@ def manage_elastic(id, name, data, printed):
         pass 
 
 
-
+# ---------------------------- TODO -------------------------------------
 # Route to search documents in ElasticSearch
 # -----------------------------------------------------------------------
 @app.route('/search-elastic', methods=['POST'])
@@ -624,7 +624,7 @@ def searchh():
     return jsonify(results)
 
 
-@app.route('/search', methods=['POST'])
+@app.route('/searchh', methods=['POST'])
 def searc():
 
     ec = elastic()
@@ -643,3 +643,23 @@ def searc():
     res = ec.client.search(index="documents", doc_type="title", body=body)
 
     return jsonify(res['hits']['hits'])
+# ---------------------------- TODO -------------------------------------
+
+
+# ---------------------------- Functional -------------------------------------
+# Search Route
+# -----------------------------------------------------------------------------
+@app.route('/search', methods=['POST'])
+def searching():
+
+    # Get the query
+    query = request.json['query']
+
+    # Data to pass
+    results = ['caso_ontologia_45.txt', 'caso_clinico_20.txt', 'caso_ontologia_20.txt']
+
+    # perform search operation using the query parameter
+    filtered_results = [result for result in results if query in result]
+
+    # Return filtered results according the searchin, json format
+    return jsonify(filtered_results)

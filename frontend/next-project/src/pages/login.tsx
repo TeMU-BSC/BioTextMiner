@@ -1,8 +1,8 @@
 /**
-   * @file signin.tsx Typescript file. 
+   * @file login.tsx Typescript file. 
    * @description Login page with form and fetching with login api
    * @version 1.2
-   * @author Siddique Muhammad, Denys Chorny
+   * @author Siddique Muhammad
 */
 
 /**
