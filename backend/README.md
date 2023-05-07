@@ -1,19 +1,21 @@
-## Modelo-controlador-vista (MVC) -> Patrón de arquitectura de software, separa los datos y la lógica de una aplicación.
+## The Backend is structured following the MVC pattern.
 
-- Modelo: Es la representación de la información con la cual el sistema opera, por lo tanto gestiona todos los accesos a dicha información, tanto consultas como actualizaciones, implementando también los privilegios de acceso que se hayan descrito en las especificaciones de la aplicación (lógica de negocio).
+## Model-View-Controller (MVC) -> Software architecture pattern that separates data and application logic.
 
-- Controlador: Responde a eventos (usualmente acciones del usuario) e invoca peticiones al ‘modelo’ cuando se hace alguna solicitud sobre la información (por ejemplo, editar un documento o un registro en una base de datos). También puede enviar comandos a su ‘vista’ asociada si se solicita un cambio en la forma en que se presenta el ‘modelo’, por tanto se podría decir que el ‘controlador’ hace de intermediario entre la ‘vista’ y el ‘modelo’.
+- Model: Represents the information that the system operates on, and manages all accesses to that information, including queries and updates, and also implements the access privileges described in the application specifications (business logic).
 
-- Vista: Presenta el ‘modelo’ (información y lógica de negocio) en un formato adecuado para interactuar (usualmente la interfaz de usuario) por tanto requiere de dicho ‘modelo’ la información que debe representar como salida.
+- Controller: Responds to events (usually user actions) and invokes requests to the 'model' when there is a request for information (for example, editing a document or a record in a database). It can also send commands to its associated 'view' if a change in the way the 'model' is presented is requested, so it could be said that the 'controller' acts as an intermediary between the 'view' and the 'model'.
+
+- View: Presents the 'model' (information and business logic) in a suitable format for interaction (usually the user interface) and requires the 'model' to provide the information to be represented as output.
 
 
-# What does init.py?
-Se utliza para inicializar paquetes de Python. 
+## What does init.py?
+It is used to initialize Python packages.
 package/
     __init__.py
-    archivo1.py
-    archivo2.py
-    archivo3.py
+    file1.py
+    file2.py
+    file3.py
     subpackage/
         __init__.py
-        submodulo.py
+        submodule.py
