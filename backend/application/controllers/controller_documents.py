@@ -32,6 +32,11 @@ import rarfile
 # Import ElasticSearch
 from elasticsearch import Elasticsearch
 
+# Configparser settings
+import configparser
+parameters = config = configparser.ConfigParser()
+parameters.read('./configuration.cfg')
+
 
 #----------------------------------------------------------------------------#
 # Routes
@@ -497,7 +502,7 @@ def elastic():
         @property
         def client(self) -> Elasticsearch:
             if self._client is None:
-                self._client = Elasticsearch("http://localhost:9200",basic_auth=('elastic', 'PlanTL-2019'))
+                self._client = Elasticsearch(parameters['elastic']['url'],basic_auth=(parameters['elastic']['user'], parameters['elastic']['password']))
             return self._client
 
         def parallel_bulk(self, *args, **kwargs):
@@ -552,85 +557,16 @@ def manage_elastic(id, name, data, printed):
 @app.route('/search-elastic', methods=['POST'])
 def search():
 
-    es = elastic()
-
-    word = request.json["word"]
-
-    search_term = word
-
-    # Define los parámetros de búsqueda
-    search_params = {
-        "query": {
-            "match": {
-                "texto": search_term
-            }
-        }
-    }
-
-
-    # Realiza la búsqueda
-    results = es.client.search(index="documents", query={'match_all' : {}})
-
-    #search_result = es.client.search(index="documents", body=search_params)
-    print(results)
-
-
-    # Imprime los resultados
-    #print(search_result['hits']['hits'])
-
-    #print(search_result)
-
-
-# Route to search documents in ElasticSearch
-# -----------------------------------------------------------------------
-@app.route('/search-elasticc', methods=['GET'])
-def searchh():
-
-    class ElasticsearchClient:
-        def __init__(self) -> None:
-            self._client: Optional[Elasticsearch] = None
-            self.indices: List[str] = []
-
-        @property
-        def client(self) -> Elasticsearch:
-            if self._client is None:
-                self._client = Elasticsearch("http://localhost:9200",basic_auth=('elastic', 'PlanTL-2019'))
-            return self._client
-
-        def parallel_bulk(self, *args, **kwargs):
-            """
-            See https://elasticsearch-py.readthedocs.io/en/master/helpers.html#elasticsearch.helpers.parallel_bulk
-            for details, this is just a wrapper method to unify the helper method and client.
-            `parallel_bulk` returns a generator, need to `deque` it to consume.
-            """
-            
-            deque(_parallel_bulk(self.client, *args, **kwargs), maxlen=0)
-
-    ec = ElasticsearchClient()
-
-
-    # Check ElasticSearch Cluster Health
-    # try:
-    #     ec = ElasticsearchClient()
-    #     ec.client.cluster.health()
-        
-    # # If connection error, raise exeption of Runt time error
-    # except ConnectionError as e:
-    #     raise RuntimeError("Elasticsearch is not running") from e
-
-    # Realiza la búsqueda
-    results = ec.client.search(index="documents", query={'match_all' : {}})
-    # print(results)
-    return jsonify(results)
-
-
-@app.route('/searchh', methods=['POST'])
-def searc():
-
+    # Define var for elasticsearch client
     ec = elastic()
 
+    # keyword to search
     keyword = request.json['keyword']
 
+    # body for the query
+    # - start in the 45, skip the ones before that number
+    # - picks the follwing 10
+    # - query, with fuzzy (picks all the words that are similar)
     body = {
             "from": 45, 
             "size": 10,
@@ -643,8 +579,10 @@ def searc():
             }
             }
 
+    # response
     res = ec.client.search(index="documents", body=body)
 
+    # return the result in json format
     return jsonify(res['hits']['hits'])
 # ---------------------------- TODO -------------------------------------
 
