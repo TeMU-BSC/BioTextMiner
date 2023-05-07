@@ -2,7 +2,8 @@
 # File: Documents Controller
 # Description: Manages all the routes and data for the Documents table
 # Author : Siddique Muhammad
-# Date: 13/03/2023
+# Date: 08/05/2023
+# Version: 1.9.
 #----------------------------------------------------------------------------#
 
 
@@ -592,9 +593,22 @@ def search():
 
     # Return the result in json format
     return jsonify(result)
-
-
 # ---------------------------- TODO -------------------------------------
+
+
+# Function to obtain annotations of a document
+@app.route('/annotations-by-document/<string:textid>', methods=['GET'])
+def obtain_annotation(textid):
+    '''
+    Input parameters  : text_id the id of the documents
+    Output parameters : annotations of that document
+    '''
+    result = Annotation.select_annotations_by_document(textid)
+
+    return jsonify(result)
+
+
+
 
 
 # ---------------------------- Functional -------------------------------------
