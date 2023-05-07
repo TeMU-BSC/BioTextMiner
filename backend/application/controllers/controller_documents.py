@@ -530,7 +530,7 @@ def manage_elastic(id, name, data, printed):
     #     pass
     # else:
     #     ec.client.indices.create(index="documents", ignore=400)
-    ec.client.indices.create(index="documents", ignore=400)
+    # ec.client.indices.create(index="documents", ignore=400)
 
     # Create dict
     mydict = {}
@@ -579,11 +579,21 @@ def search():
             }
             }
 
-    # response
+    # Response
     res = ec.client.search(index="documents", body=body)
 
-    # return the result in json format
-    return jsonify(res['hits']['hits'])
+    # To obtain all fields of hits
+    # Return the result in json format
+    # return jsonify(res['hits']['hits'])
+
+    # To obtain only the id and the data
+    hits = res['hits']['hits']
+    result = [{'id': hit['_id'], 'data': hit['_source']['data']} for hit in hits]
+
+    # Return the result in json format
+    return jsonify(result)
+
+
 # ---------------------------- TODO -------------------------------------
 
 
