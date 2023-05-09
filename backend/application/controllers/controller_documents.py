@@ -579,8 +579,6 @@ def search_in_elastic(keyword):
 
     try:
 
-        print(keyword)
-
         # Define var for elasticsearch client
         ec = elastic()
 
@@ -609,7 +607,7 @@ def search_in_elastic(keyword):
 
         # To obtain only the id and the data
         hits = res['hits']['hits']
-        result = [{'id': hit['_id'], 'data': hit['_source']['data']} for hit in hits]
+        result = [{'id': hit['_id'], 'data': hit['_source']['data'], 'name': hit['_source']['name']} for hit in hits]
 
         # Return the result in json format
         return jsonify(result)
@@ -620,7 +618,7 @@ def search_in_elastic(keyword):
         return jsonify({'error': error_message}), 500
 
 
-
+# ------------------------- TODO --------------------------------
 # Function to obtain annotations of a document
 @app.route('/annotations-by-document/<string:textid>', methods=['GET'])
 def obtain_annotation(textid):
@@ -632,7 +630,15 @@ def obtain_annotation(textid):
 
     return jsonify(result)
 
+# 
+def get_annotations(ids):
+    pass
 
+# Obtain annotations by doc
+def annotations_by_doc(textid):
+    result = Annotation.select_annotations_by_document(textid)
+
+    return jsonify(result)
 
 
 # ---------------------------- Functional -------------------------------------
