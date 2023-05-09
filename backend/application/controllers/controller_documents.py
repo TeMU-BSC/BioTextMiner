@@ -11,7 +11,10 @@
 # Imports
 #----------------------------------------------------------------------------#
 
-# Import Flask modules
+# Import modules
+from ast import List
+from collections import deque
+from typing import Optional
 from application import app
 from flask import Flask,jsonify,request
 
@@ -32,6 +35,7 @@ import rarfile
 
 # Import ElasticSearch
 from elasticsearch import Elasticsearch
+from elasticsearch.exceptions import ConnectionTimeout
 
 # Configparser settings
 import configparser
@@ -506,14 +510,14 @@ def elastic():
                 self._client = Elasticsearch(parameters['elastic']['url'],basic_auth=(parameters['elastic']['user'], parameters['elastic']['password']))
             return self._client
 
-        def parallel_bulk(self, *args, **kwargs):
-            """
-            See https://elasticsearch-py.readthedocs.io/en/master/helpers.html#elasticsearch.helpers.parallel_bulk
-            for details, this is just a wrapper method to unify the helper method and client.
-            `parallel_bulk` returns a generator, need to `deque` it to consume.
-            """
+        # def parallel_bulk(self, *args, **kwargs):
+        #     """
+        #     See https://elasticsearch-py.readthedocs.io/en/master/helpers.html#elasticsearch.helpers.parallel_bulk
+        #     for details, this is just a wrapper method to unify the helper method and client.
+        #     `parallel_bulk` returns a generator, need to `deque` it to consume.
+        #     """
             
-            deque(_parallel_bulk(self.client, *args, **kwargs), maxlen=0)
+            # deque(_parallel_bulk(self.client, *args, **kwargs), maxlen=0)
 
     ec = ElasticsearchClient()
 
@@ -558,41 +562,48 @@ def manage_elastic(id, name, data, printed):
 @app.route('/search-elastic', methods=['POST'])
 def search():
 
-    # Define var for elasticsearch client
-    ec = elastic()
+    try:
+        # Define var for elasticsearch client
+        ec = elastic()
 
-    # keyword to search
-    keyword = request.json['keyword']
-
-    # body for the query
-    # - start in the 45, skip the ones before that number
-    # - picks the follwing 10
-    # - query, with fuzzy (picks all the words that are similar)
-    body = {
-            "from": 45, 
-            "size": 10,
-            "query": {
-                "fuzzy": {
-                "data": {
-                    "value": keyword
+        # keyword to search
+        keyword = request.json['keyword']
+        print(keyword)
+        # body for the query
+        # - start in the 45, skip the ones before that number
+        # - picks the follwing 10
+        # - query, with fuzzy (picks all the words that are similar)
+        body = {
+                "from": 45, 
+                "size": 10,
+                "query": {
+                    "fuzzy": {
+                    "data": {
+                        "value": keyword
+                    }
+                    }
                 }
                 }
-            }
-            }
 
-    # Response
-    res = ec.client.search(index="documents", body=body)
+        # Response
+        res = ec.client.search(index="documents", body=body)
 
-    # To obtain all fields of hits
-    # Return the result in json format
-    # return jsonify(res['hits']['hits'])
+        # To obtain all fields of hits
+        # Return the result in json format
+        # return jsonify(res['hits']['hits'])
 
-    # To obtain only the id and the data
-    hits = res['hits']['hits']
-    result = [{'id': hit['_id'], 'data': hit['_source']['data']} for hit in hits]
+        # To obtain only the id and the data
+        hits = res['hits']['hits']
+        result = [{'id': hit['_id'], 'data': hit['_source']['data']} for hit in hits]
 
-    # Return the result in json format
-    return jsonify(result)
+        # Return the result in json format
+        return jsonify(result)
+    
+    except ConnectionTimeout as e:
+        # Send an error response to the frontend
+        error_message = "Connection timeout to ElasticSearch: {}".format(str(e))
+        return jsonify({'error': error_message}), 500
+
 # ---------------------------- TODO -------------------------------------
 
 
@@ -606,7 +617,6 @@ def obtain_annotation(textid):
     result = Annotation.select_annotations_by_document(textid)
 
     return jsonify(result)
-
 
 
 
