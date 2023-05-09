@@ -12,7 +12,9 @@ const Layout = ({ children }: LayoutProps) => {
     <div className="bg-gray-100 min-h-screen">
       <NavBar/>
       {children}
-      <Footer/>
+      <div className='bottom-0 w-full text-center'>
+        <Footer/>
+      </div>
     </div>
   );
 };
