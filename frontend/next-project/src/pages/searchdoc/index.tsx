@@ -23,6 +23,7 @@ import React, { useState } from "react";
 const SearchDocs = () => { 
 
     // Define constants
+    const [isLoading, setIsLoading] = useState(false);
     const [keyword, setKeyword] = useState(''); // query passed in the searc
     const [message, setMessage] = useState(''); // message to show of results found
     const [results, setResults] = useState<string[]>([]); // results to show
@@ -36,41 +37,52 @@ const SearchDocs = () => {
 
         // preventDefault
         event.preventDefault();
-    
+
+        // set isLoading to true to show the loading animation
+        setIsLoading(true); 
+        
+        setErrors(''); 
+
         // Reset values
         setSelectedResult(null);
         setResults([]);
     
         // Response from the server
-        const response = await fetch('http://localhost:5000/search-elastic', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ keyword }),
-        });
-        
 
-        // console.log(response)
-    
-        if (response.status==500) {
-            console.log('caido')
-            setErrors('An error occurred')
+        try {
+            const response = await fetch('http://localhost:5000/search-elastic', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ keyword }),
+            });
+            
 
-        } else {
-            // Set data as a result
-            const data = await response.json();
+            // console.log(response)
         
-            // Results length
-            const numResults = data.length;
-        
-            // If there are results, show them; else "No data found" message.
-            if (numResults > 0) {
-              setResults(data);
-              setMessage(`${numResults} result${numResults === 1 ? '' : 's'} found`);
+            if (response.status==500) {
+                setErrors('An error occurred')
+
             } else {
-                setMessage('No data found');
+                // Set data as a result
+                const data = await response.json();
+            
+                // Results length
+                const numResults = data.length;
+            
+                // If there are results, show them; else "No data found" message.
+                if (numResults > 0) {
+                setResults(data);
+                setMessage(`${numResults} result${numResults === 1 ? '' : 's'} found`);
+                } else {
+                    setMessage('No data found');
+                }
             }
+        } catch (error) {
+            setErrors('An error occurred');
+        } finally {
+            setIsLoading(false);
         }
 
       };
@@ -140,19 +152,29 @@ const SearchDocs = () => {
             {/* End show message */}
             </div>
 
-
-            {/* Results */}
-            <div className="grid grid-cols-1 gap-5 mt-8">
-                {results.map((result) => (
-                <div key={result} className={`bg-gray-200 p-4 rounded-lg ${selectedResult === result ? 'border-2 border-blue-500' : ''}`}>
-                <label>
-                    <input type="checkbox" checked={selectedResult === result} onChange={() => setSelectedResult(result)} />
-                    <span className="ml-2">{result}</span>
-                </label>
+            {isLoading ? (
+                <>
+                    <div className="p-10">
+                        <div className="loader"></div> 
+                    </div>
+                </>
+            ) : (
+                <>
+                {/* Results */}
+                <div className="grid grid-cols-1 gap-5 mt-8">
+                    {results.map((result) => (
+                    <div key={result} className={`bg-gray-200 p-4 rounded-lg ${selectedResult === result ? 'border-2 border-blue-500' : ''}`}>
+                    <label>
+                        <input type="checkbox" checked={selectedResult === result} onChange={() => setSelectedResult(result)} />
+                        <span className="ml-2">{result}</span>
+                    </label>
+                    </div>
+                    ))}
+                {/* End Results */}
                 </div>
-                ))}
-            {/* End Results */}
-            </div>
+                </>
+            )}
+
 
             {/* End Searching (Search and results) */}
             </div>
