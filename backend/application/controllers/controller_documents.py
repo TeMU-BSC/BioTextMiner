@@ -562,13 +562,28 @@ def manage_elastic(id, name, data, printed):
 @app.route('/search-elastic', methods=['POST'])
 def search():
 
+    # keyword to search
+    keyword = request.json['keyword']
+
+    # If keyword is null, return error message. Else, search in elastic
+    if keyword =='':
+        return jsonify({'error': "No data received"}), 400
+    else:
+        result = search_in_elastic(keyword)
+
+        return result
+    
+
+# ---------------------------- TODO -------------------------------------
+def search_in_elastic(keyword):
+
     try:
+
+        print(keyword)
+
         # Define var for elasticsearch client
         ec = elastic()
 
-        # keyword to search
-        keyword = request.json['keyword']
-        print(keyword)
         # body for the query
         # - start in the 45, skip the ones before that number
         # - picks the follwing 10
@@ -598,13 +613,12 @@ def search():
 
         # Return the result in json format
         return jsonify(result)
-    
+        
     except ConnectionTimeout as e:
         # Send an error response to the frontend
         error_message = "Connection timeout to ElasticSearch: {}".format(str(e))
         return jsonify({'error': error_message}), 500
 
-# ---------------------------- TODO -------------------------------------
 
 
 # Function to obtain annotations of a document

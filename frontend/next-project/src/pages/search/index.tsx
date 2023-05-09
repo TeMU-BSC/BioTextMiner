@@ -60,12 +60,15 @@ const SearchDocs = () => {
             });
             
 
-            // console.log(response)
+            console.log(response)
         
             if (response.status==500) {
                 setErrors('An error occurred')
 
-            } else {
+            } else if (response.status==400) {
+                setErrors('No data received')
+            }
+            else {
                 // Set data as a result
                 const data = await response.json();
             
@@ -125,6 +128,7 @@ const SearchDocs = () => {
                     id="keyword"
                     name="keyword"
                     className="border border-gray-300 px-4 py-2 rounded-md flex-grow"
+                    required
                 />
                 <br></br>
 
