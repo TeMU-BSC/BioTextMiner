@@ -29,7 +29,28 @@ def select_corpus():
     # fetchall and return the data
         data = cursor.fetchall()
         return data
-    
+
+def select_corpus_top():
+    conexion = get_connection()
+    # cursor
+    resp = []
+    with conexion.cursor() as cursor:
+
+        # execute command
+        cursor.execute("""SELECT c.corpus_id,c.corpus_name,c.description, 
+                        GROUP_CONCAT(DISTINCT a.attributes SEPARATOR ',') AS labels,
+                        c.description,c.version, COUNT(dc.text_id) AS n_docs
+                        FROM corpus c 
+                        LEFT JOIN document_corpus dc ON c.corpus_id = dc.corpus_id 
+                        LEFT JOIN annotations a ON dc.text_id = a.text_id AND dc.corpus_id = a.corpus_id 
+                        GROUP BY c.corpus_id LIMIT 10;""")
+        row_headers = [x[0] for x in cursor.description] #this will extract row headers
+    # fetchall and return the data
+        data = cursor.fetchall()
+        for dat in data:
+            resp.append(dict(zip(row_headers,dat)))
+    print(resp)
+    return resp
 
 # Function to select a corpus by id
 # --------------------------------------------------------------------------------

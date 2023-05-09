@@ -80,6 +80,9 @@ const NavBar = () => {
                   >
                     Logout
                   </button>
+                  <button className="ml-4 px-3 py-2 rounded-md text-base font-medium user_image">
+                    {user}
+                  </button>
                 </div>
               ) : (
                 <>
