@@ -1,0 +1,67 @@
+version: "3.0"
+volumes:
+  mysqldata:
+    driver: local
+    driver_opts:
+      type: "none"
+      o: "bind"
+      device: "${HOME}/server/mysql-phpmyadmin/data"
+
+services:
+  elasticsearch:
+    container_name: elastic-container
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.7.1
+    environment:
+      - xpack.security.enabled=false
+      - "discovery.type=single-node"
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    networks:
+      - ek-net
+    ports:
+      - 9200:9200
+  kibana:
+    container_name: kibana-container
+    image: docker.elastic.co/kibana/kibana:8.7.1
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elastic-container:9200
+    networks:
+      - ek-net
+    depends_on:
+      - elasticsearch
+    ports:
+      - 5601:5601
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: Admin
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: biotextminer
+      MYSQL_PASSWORD: biotextminer_pass
+    volumes:
+      - mysqldata:/var/lib/mysql
+    ports:
+      - 3306:3306
+    networks:
+      - ek-net
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - 8081:80
+    networks:
+      - ek-net
+networks:
+  ek-net:
+    driver: bridge

@@ -1,3 +1,34 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+* {
+  margin: 0;
+  padding: 0;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+
+.footer {
+  /* display: flex;
+  justify-content: space-between;
+  width: 100%;
+  position: absolute;
+  bottom: 0; */
+  justify-content: space-between;
+  position: sticky;
+  width: 100%;
+  bottom: 0;
+  clear: both;
+}
+#navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
