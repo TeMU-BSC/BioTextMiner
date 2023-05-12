@@ -49,7 +49,6 @@ def select_corpus_top():
         data = cursor.fetchall()
         for dat in data:
             resp.append(dict(zip(row_headers,dat)))
-    print(resp)
     return resp
 
 # Function to select a corpus by id

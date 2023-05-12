@@ -1,11 +1,4 @@
 version: "3.0"
-volumes:
-  mysqldata:
-    driver: local
-    driver_opts:
-      type: "none"
-      o: "bind"
-      device: "${HOME}/server/mysql-phpmyadmin/data"
 
 services:
   elasticsearch:
@@ -44,8 +37,6 @@ services:
       MYSQL_DATABASE: mydb
       MYSQL_USER: biotextminer
       MYSQL_PASSWORD: biotextminer_pass
-    volumes:
-      - mysqldata:/var/lib/mysql
     ports:
       - 3306:3306
     networks:

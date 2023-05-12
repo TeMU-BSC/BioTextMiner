@@ -1,9 +1,10 @@
-import NavBar from "../components/navbar";
+import NavBar from "../../components/navbar";
 import Link from "next/link";
 import { Card, CardContent, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import CorpusImage from "@/components/corpusImage";
 import axios from "axios";
+import { stringify } from "querystring";
 export interface Corpus {
   corpus_id: number;
   corpus_name: string;
@@ -103,7 +104,9 @@ const CorpusPage = () => {
           </div>
           <div className="flex gap-9 m-2">
             {corpuses.map((corpus: { corpus_id: any }) => (
-              <CorpusImage data={corpus} key={corpus.corpus_id}></CorpusImage>
+              <Link href={"corpus/" + corpus.corpus_id} key={corpus.corpus_id}>
+                <CorpusImage data={corpus} key={corpus.corpus_id}></CorpusImage>
+              </Link>
             ))}
           </div>
           <div>

@@ -4,6 +4,7 @@
 
 
 -- CREATE DATABASE
+DROP DATABASE fct;
 CREATE DATABASE fct;
 use fct;
 
@@ -220,7 +221,7 @@ insert into ontologies values(1, 'name1','1.0','es','desc01');
 insert into ontologies values(2, 'name2','1.0','es','desc02');
 insert into ontologies values(3, 'name3','1.2','es','desc04');
 insert into ontologies values(4, 'name3','1.2','es','desc03');
-	
+insert into ontologies values(5, 'name5','1.5','es','desc05');	
 -- Table : ontology_descriptors
 insert into ontology_descriptors values(1, 1, 1, 'desc01', 'label01','es','type01');
 insert into ontology_descriptors values(2, 2, 2, 'desc02', 'label02','es','type02');
