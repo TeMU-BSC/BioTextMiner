@@ -1,3 +1,18 @@
+/**
+ * @file Navbar.tsx
+ * @description NavBar for the application
+ * @author Siddique Muhammad
+ * @version 1.0
+ */
+
+
+/**
+ * @imports
+ * @Link from next/link
+ * @Image from next library
+ * @Cookies from js-cookie
+ * @router from next/router
+ */
 import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -5,6 +20,12 @@ import Cookies from 'js-cookie';
 import router from 'next/router';
 
 
+
+/**
+ * @const Navbar
+ * @descriptiion manages navbar
+ * @returns html navbar
+ */
 const NavBar = () => {
 
   // Perform localStorage action
@@ -38,6 +59,7 @@ const NavBar = () => {
     router.push('/');
   };
 
+  // Return html navbar
   return (
     
     <nav className="bg-gray-900 text-white py-px">
@@ -68,15 +90,18 @@ const NavBar = () => {
               {/* <div> */}
                 {user ? (
                 <div>
+                  <Link href="/view" className="ml-4 px-3 py-2 rounded-md text-base font-medium">
+                    View
+                  </Link>
                   <Link href="/search" className="ml-4 px-3 py-2 rounded-md text-base font-medium">
                     Search
                   </Link>
                   <Link href="/corpus" className="ml-4 px-3 py-2 rounded-md text-base font-medium">
-                  Corpus
+                    Analyze
                   </Link>
-                  <Link href="/documents" className="ml-4 px-3 py-2 rounded-md text-base font-medium">
+                  {/* <Link href="/documents" className="ml-4 px-3 py-2 rounded-md text-base font-medium">
                     Documents
-                  </Link>
+                  </Link> */}
                   <button className="ml-4 px-3 py-2 rounded-md text-base font-medium" onClick={handleLogout}>
                         Logout
                   </button>
