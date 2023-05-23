@@ -1,13 +1,33 @@
+/**
+ * @file upload 
+ * @description upload a zip file to save the documents in the database
+ * @author Siddique Muhammad
+ */
+
+
+/**
+ * @imports
+ * @React from react library
+ * @axios from axios library
+ * @Layout component
+ */
 import React, { useState } from 'react';
 import axios from 'axios';
 import Layout from '@/components/Layout';
 
-
+/**
+ * @FileUploadForm
+ * @description upload from Function Component
+ * @returns html upload page
+ */
 const FileUploadForm: React.FC = () => {
+
+  // Definitions
   const [file, setFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState('');
 
 
+  // Handle file input change
   const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       setFile(event.target.files[0]);
@@ -15,6 +35,7 @@ const FileUploadForm: React.FC = () => {
     }
   };
 
+  // Handle submit
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -22,26 +43,35 @@ const FileUploadForm: React.FC = () => {
       return;
     }
 
+    // NewForm Data for the file to upload
     const formData = new FormData();
     formData.append('file', file);
 
+    // Try to upload, exept errors
     try {
+
       const response = await axios.post('http://localhost:5000/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
+
+      // Set file name to show once is uploaded
       setFileName(file.name);
       console.log(response);
+
     } catch (error) {
       console.error(error);
     }
   };
 
+  // Return page
   return (
+
     <Layout>
+
       <div className='w-80 m-8 mx-auto'>
-        
+
         <h1 className="text-4xl font-bold mb-6 text-center">Upload zip file</h1>
 
         <form onSubmit={handleSubmit} className="flex flex-col items-center space-y-4">
@@ -77,8 +107,11 @@ const FileUploadForm: React.FC = () => {
         </form>
 
       </div>
+
     </Layout>
   );
 };
 
+
+// Export FileUploadForm
 export default FileUploadForm;
