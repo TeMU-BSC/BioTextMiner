@@ -96,7 +96,7 @@ const NavBar = () => {
                   <Link href="/search" className="ml-4 px-3 py-2 rounded-md text-base font-medium">
                     Search
                   </Link>
-                  <Link href="/corpus" className="ml-4 px-3 py-2 rounded-md text-base font-medium">
+                  <Link href="/analyze" className="ml-4 px-3 py-2 rounded-md text-base font-medium">
                     Analyze
                   </Link>
                   {/* <Link href="/documents" className="ml-4 px-3 py-2 rounded-md text-base font-medium">
