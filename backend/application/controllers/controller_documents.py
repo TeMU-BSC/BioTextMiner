@@ -570,8 +570,8 @@ def search():
         return jsonify({'error': "No data received"}), 400
     else:
         result = search_in_elastic(keyword)
-
-        return result
+        print(result)
+        return jsonify(result)
     
 
 # ---------------------------- TODO -------------------------------------
@@ -610,7 +610,7 @@ def search_in_elastic(keyword):
         result = [{'id': hit['_id'], 'data': hit['_source']['data'], 'name': hit['_source']['name']} for hit in hits]
 
         # Return the result in json format
-        return jsonify(result)
+        return (result)
         
     except ConnectionTimeout as e:
         # Send an error response to the frontend

@@ -58,9 +58,9 @@ const SearchDocs = () => {
             },
             body: JSON.stringify({ keyword }),
             });
-            
+            // const data = await response.json();
 
-            console.log(response)
+            // console.log(response)
         
             if (response.status==500) {
                 setErrors('An error occurred')
@@ -71,13 +71,17 @@ const SearchDocs = () => {
             else {
                 // Set data as a result
                 const data = await response.json();
-            
+                console.log(data)
+
+                setResults(data)
+                console.log(data)
                 // Results length
                 const numResults = data.length;
-            
+
+
                 // If there are results, show them; else "No data found" message.
                 if (numResults > 0) {
-                setResults(data);
+                // setResults(data);
                 setMessage(`${numResults} result${numResults === 1 ? '' : 's'} found`);
                 } else {
                     setMessage('No data found');
@@ -167,15 +171,27 @@ const SearchDocs = () => {
                 <>
                 {/* Results */}
                 <div className="grid grid-cols-1 gap-5 mt-8">
-                    {results.map((result) => (
+                    {/* {results.map((result) => (
                     <div key={result} className={`bg-gray-200 p-4 rounded-lg ${selectedResult === result ? 'border-2 border-blue-500' : ''}`}>
                     <label>
                         <input type="checkbox" checked={selectedResult === result} onChange={() => setSelectedResult(result)} />
                         <span className="ml-2">{result}</span>
                     </label>
                     </div>
-                    ))}
+                    ))} */}
                 {/* End Results */}
+
+                <ul>
+                    {results.map(result => (
+                        <div key={result} className={`bg-gray-200 p-4 rounded-lg m-2 ${selectedResult === result ? 'border-2 border-blue-500' : ''}`}>
+                        <label>
+                            <input type="checkbox" checked={selectedResult === result} onChange={() => setSelectedResult(result)} />
+                            <h1>{result.name}</h1>
+                            <span className="ml-2">{result.data.substring(0, 100)+'...'}</span>
+                        </label>
+                        </div>
+                    ))}
+                </ul>
                 </div>
                 </>
             )}
@@ -186,15 +202,14 @@ const SearchDocs = () => {
 
             {/* Selected Result */}
             <div className="basis-1/2">
-            {selectedResult !== null && (
-                <div className="ml-9 p-4 bg-gray-200 rounded-lg">
-                <h2 className="text-lg font-bold mb-2">{selectedResult}</h2>
-                <p>This is the data for {selectedResult}.</p>
-                </div>
-            )}
+                        {selectedResult !== null && (
+                            <div className="ml-9 p-4 bg-gray-200 rounded-lg">
+                            <h2 className="text-lg font-bold mb-2">{selectedResult}</h2>
+                            <p>This is the data for {selectedResult}.</p>
+                            </div>
+                        )}
             {/* End Selected Result */}
             </div>
-
         {/* End Search (Results, search, and selected)*/}
         </div>
         {errors}
@@ -205,7 +220,7 @@ const SearchDocs = () => {
 
 
         {/* Footer */}
-        <div className='absolute inset-x-0 bottom-0'>
+        <div className=''>
             <Footer></Footer>
         {/* End Footer */}
         </div>

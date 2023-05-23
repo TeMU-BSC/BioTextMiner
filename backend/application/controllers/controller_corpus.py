@@ -42,7 +42,28 @@ def select_corpus_data():
         return jsonify({"result":"no data available"})
 
 
-# Route to select a document by id
+# Route to select top coprus by id
+# -------------------------------------------------------------
+@app.route('/corpus_top', methods=['GET'])
+def select_corpus_top():
+
+    # try to find all corpus, except error.
+    try:
+
+        # use the function in Corpus model
+        response = Corpus.select_corpus_top()
+
+        # return the corpus as the response
+        return jsonify({"result": "ok finding corpus", "response":response})
+    
+    except:
+        
+        # error message as the result
+        return jsonify({"result":"no data available"})
+        
+
+
+# Route to select a coprus by id
 # -------------------------------------------------------------
 @app.route('/corpus/<string:id>', methods=['GET'])
 def select_corpus_by_id(id):
