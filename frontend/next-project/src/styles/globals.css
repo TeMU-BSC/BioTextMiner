@@ -17,3 +17,25 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+
+html, body {
+    height: 100%;
+  }
+  
+  /* Set the container div to be a flex container with column direction */
+  .flex-col {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Make the main content div take up all the available space */
+  .flex-grow {
+    flex-grow: 1;
+  }
+  
+  /* Push the footer to the bottom of the container */
+  footer {
+    margin-top: auto;
+  }
+  
