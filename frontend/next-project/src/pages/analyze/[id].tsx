@@ -1,10 +1,18 @@
+/**
+ * @file [id].tsx
+ * @description information of a corpus
+ * @author Siddique Muhammad
+ */
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import NavBar from '@/components/Navbar';
-import Footer from '@/components/footer';
+import Layout from '@/components/Layout';
 
+
+/**
+ * @const Corpus
+ * @returns html
+ */
 const Corpus = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -50,8 +58,7 @@ const Corpus = () => {
 
 
   return (
-    <>
-      <NavBar />
+    <Layout>
 
       <div>
         <h1 className='text-3xl font-bold text-center mt-10'>Dashboard</h1>
@@ -77,12 +84,7 @@ const Corpus = () => {
 
       </div>
 
-      <div>
-        <div className="absolute inset-x-0 bottom-0">
-          <Footer />
-        </div>
-      </div>
-    </>
+    </Layout>
   );
 };
 

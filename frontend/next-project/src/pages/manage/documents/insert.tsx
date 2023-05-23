@@ -1,9 +1,23 @@
+/**
+ * @file insert.tsx
+ * @description insert documents
+ * @author Siddique Muhammad
+ */
+
+
+/**
+ * @imports
+ */
 import React, { useState } from 'react';
 import axios from 'axios';
-import NavBar from '@/components/Navbar';
-import Footer from '@/components/footer';
+import Layout from '@/components/Layout';
 
-const CorpusForm = () => {
+
+/**
+ * @const DocumentForm
+ * @returns html form
+ */
+const DocumentForm = () => {
   const [formData, setFormData] = useState({
     name : '',
     author: '',
@@ -48,8 +62,8 @@ const CorpusForm = () => {
   };
 
   return (
-    <>
-    <NavBar></NavBar>
+    <Layout>
+
     <div className='m-8'>
       <form onSubmit={handleSubmit} className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-md">
       <h1 className='text-4xl font-bold m-2'>Insert Document</h1>
@@ -156,9 +170,9 @@ const CorpusForm = () => {
 
       </form>
     </div>
-    <Footer></Footer>
-    </>
+
+    </Layout>
   );
 };
 
-export default CorpusForm;
+export default DocumentForm;
