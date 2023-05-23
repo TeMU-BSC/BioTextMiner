@@ -1,4 +1,4 @@
-import NavBar from "../components/navbar";
+import NavBar from "../components/Navbar";
 import Link from "next/link";
 import { Card, CardContent, Typography } from "@mui/material";
 import { useEffect, useState } from "react";

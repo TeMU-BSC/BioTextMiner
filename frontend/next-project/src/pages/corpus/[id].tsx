@@ -2,14 +2,8 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import NavBar from '@/components/navbar';
+import NavBar from '@/components/Navbar';
 import Footer from '@/components/footer';
-import "@progress/kendo-theme-material/dist/all.css";
-import { TileLayout } from "@progress/kendo-react-layout";
-import CanvasJSReact from '@canvasjs/react-charts';
-
-const CanvasJSChart = CanvasJSReact.CanvasJSChart;
-
 
 const Corpus = () => {
   const router = useRouter();

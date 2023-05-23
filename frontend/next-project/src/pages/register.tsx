@@ -1,4 +1,4 @@
-import NavBar from '../components/navbar'
+import NavBar from '../components/Navbar'
 import { useState } from 'react';
 import Link from 'next/link';
 import Footer from '@/components/footer';

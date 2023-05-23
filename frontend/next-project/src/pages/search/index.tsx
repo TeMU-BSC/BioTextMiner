@@ -11,8 +11,9 @@
  * Footer 
  * React library, useState
  */
-import NavBar from "@/components/navbar";
-import Footer from "@/components/footer";
+import Layout from "@/components/Layout";
+import NavBar from "@/components/Navbar";
+// import Footer from "@/components/footer";
 import React, { useState } from "react";
 
 
@@ -97,10 +98,10 @@ const SearchDocs = () => {
 
 
     return (
-       <div>
+       <Layout>
 
         {/* NavBar */}
-        <NavBar></NavBar>
+        {/* <NavBar></NavBar> */}
 
         {/* General Div*/}
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 m-3">
@@ -220,12 +221,12 @@ const SearchDocs = () => {
 
 
         {/* Footer */}
-        <div className=''>
+        {/* <div className=''>
             <Footer></Footer>
         {/* End Footer */}
-        </div>
+        {/* </div>  */}
 
-    </div>
+    </Layout>
     );
 }
 

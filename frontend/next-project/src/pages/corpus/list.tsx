@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import NavBar from '@/components/navbar';
+import NavBar from '@/components/Navbar';
 import Footer from '@/components/footer';
 import Link from 'next/link';
 

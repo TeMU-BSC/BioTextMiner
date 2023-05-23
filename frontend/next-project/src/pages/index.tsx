@@ -4,15 +4,17 @@
  * @version 1.1
  */
 
-import NavBar from '../components/navbar'
+import NavBar from '../components/Navbar'
 import Link from 'next/link';
 import Image from 'next/image';
-import Footer from '@/components/footer';
+// import Footer from '@/components/footer';
+import Layout from '@/components/Layout';
 
 const HomePage = () => (
-  <div className="min-h-screen flex flex-col">
+  <Layout>
+  {/* <div className="min-h-screen flex flex-col"> */}
     <div className="flex-grow">
-      <NavBar />
+      {/* <NavBar /> */}
       <section>
         <div className=" justify-center items-center w-8/12 mx-auto my-8">
           <div className="text-center">
@@ -41,10 +43,11 @@ const HomePage = () => (
     </div>
 
     {/* Include footer */}
-    <div className=''>
+    {/* <div className=''>
       <Footer></Footer>
     </div>
-  </div>
+  </div> */}
+  </Layout>
 )
 
 export default HomePage
