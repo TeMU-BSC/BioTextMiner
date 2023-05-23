@@ -16,14 +16,14 @@ import cookie from 'cookie';
  * @function middleware
  * @description manages the private access routes
  * @param request petition from the client
- * @returns function
+ * @returns middleware
  */
 export function middleware(request: NextRequest) {
   const parsedCookies = cookie.parse(request.headers.get('cookie') || '');
   let logged = parsedCookies.loggedin;
 
   // No access to corpus/documents/search page if not logged in
-  if (!logged && request.nextUrl.pathname.startsWith('/corpus')||(!logged && request.nextUrl.pathname.startsWith('/documents'))||(!logged && request.nextUrl.pathname.startsWith('/search'))) {
+  if (!logged && request.nextUrl.pathname.startsWith('/analyze')||(!logged && request.nextUrl.pathname.startsWith('/view'))||(!logged && request.nextUrl.pathname.startsWith('/search'))) {
     return NextResponse.rewrite(new URL('/login', request.url));
   }
 

@@ -4,17 +4,27 @@
  * @version 1.1
  */
 
-import NavBar from '../components/Navbar'
-import Link from 'next/link';
+
+/**
+ * @imports
+ * @Image from next/image
+ * @Layout component
+ */
 import Image from 'next/image';
-// import Footer from '@/components/footer';
 import Layout from '@/components/Layout';
 
+
+/**
+ * @const HomePage
+ * @returns html home page
+ */
 const HomePage = () => (
+  
   <Layout>
-  {/* <div className="min-h-screen flex flex-col"> */}
+
     <div className="flex-grow">
-      {/* <NavBar /> */}
+
+      {/* Section welcome */}
       <section>
         <div className=" justify-center items-center w-8/12 mx-auto my-8">
           <div className="text-center">
@@ -27,6 +37,7 @@ const HomePage = () => (
         </div>
       </section>
 
+      {/* Section image */}
       <section>
         <div className="max-w-screen-lg mx-auto">
           <div className="bg-white rounded-md overflow-hidden shadow-md">
@@ -40,13 +51,9 @@ const HomePage = () => (
           </div>
         </div>
       </section>
+
     </div>
 
-    {/* Include footer */}
-    {/* <div className=''>
-      <Footer></Footer>
-    </div>
-  </div> */}
   </Layout>
 )
 
