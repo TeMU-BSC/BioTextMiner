@@ -6,15 +6,18 @@
 
 import Layout from "@/components/Layout";
 
-
-const CorpusPage = () => {
+/**
+ * @const Viewpage
+ * @returns html visualization page
+ */
+const Viewpage = () => {
     return (
         <Layout>
-            <section className="text-center">
-                <p>On construction.</p>
+            <section className="text-center m-10">
+                <h1 className="text-4xl font-bold">In progress...</h1>
             </section>
         </Layout>
     )
 };
 
-export default CorpusPage;
+export default Viewpage;
