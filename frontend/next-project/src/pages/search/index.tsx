@@ -1,19 +1,16 @@
 /**
    * @file index.tsx Typescript file. 
-   * @description Search section
+   * @description Search documents in the database
    * @version 1.0
    * @author Siddique Muhammad
 */
 
 /**
  * @imports
- * NavBar component
- * Footer 
+ * Layout
  * React library, useState
  */
 import Layout from "@/components/Layout";
-import NavBar from "@/components/Navbar";
-// import Footer from "@/components/footer";
 import React, { useState } from "react";
 
 
@@ -99,9 +96,6 @@ const SearchDocs = () => {
 
     return (
        <Layout>
-
-        {/* NavBar */}
-        {/* <NavBar></NavBar> */}
 
         {/* General Div*/}
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 m-3">
@@ -217,14 +211,6 @@ const SearchDocs = () => {
 
         {/* End General Div*/}
         </div>
-
-
-
-        {/* Footer */}
-        {/* <div className=''>
-            <Footer></Footer>
-        {/* End Footer */}
-        {/* </div>  */}
 
     </Layout>
     );
