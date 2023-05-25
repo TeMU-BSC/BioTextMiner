@@ -13,11 +13,10 @@
  * Link from next/link
  * Cookies
  */
-import Footer from '@/components/footer'
-import NavBar from '@/components/Navbar'
 import Link from 'next/link'
 import { useState } from 'react'
 import Cookies from "js-cookie";
+import Layout from '@/components/Layout';
 
 
 /**
@@ -48,6 +47,7 @@ export default function Login() {
     const data = await res.json()
 
     if (data.error || data.err=="true" || data.data==null) {
+      console.log(data)
       setError(data.error)
       setMis("Error")
     }  else {
@@ -66,8 +66,7 @@ export default function Login() {
   
   // Return html
   return (
-    <div>
-    <NavBar></NavBar>
+  <Layout>
     <div>
       <form onSubmit={handleSubmit} className="w-80 flex flex-col space-y-4 mx-auto">
       <label className='text-center m-6 text-sky-400/100 text-3xl font-extrabold underline'>Login</label>
@@ -96,9 +95,6 @@ export default function Login() {
         </div>
       </form>
     </div>
-    <div className='absolute inset-x-0 bottom-0'>
-      <Footer></Footer>
-    </div>
-    </div>
+    </Layout>
   )
 }
