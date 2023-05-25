@@ -14,6 +14,16 @@ import Layout from '@/components/Layout';
 
 // Not used yet
 import { Card, CardContent, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+
+interface Corpus {
+  id: number;
+  corpus_name: string;
+  labels: string[];
+  description: string;
+  version: string;
+  numDocuments: number;
+}
 
 
 /**
@@ -23,57 +33,62 @@ import { Card, CardContent, Typography } from '@mui/material';
  * @returns html page
  */
 const AnalyzePage = () => {
+  const [corpusData, setCorpusData] = useState<Corpus[]>([]);
+
+  useEffect(() => {
+    const fetchCorpusData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/corpus');
+        const data = await response.json();
+        setCorpusData(data.response);
+        console.log(data.response[0].corpus_id)
+      } catch (error) {
+        console.error('Error fetching corpus data:', error);
+      }
+    };
+    fetchCorpusData();
+
+  }, []);
 
   return (
     <Layout>
-      {/* Main Div */}
-      <div className="flex flex-col bg-gray-100 ">
-
-        {/* Content */}
-        <div className="flex-grow ">
-
-          <div className="flex flex-col items-center justify-center my-8">
-            <div className="text-center w-10/12">
-              <h1 className="text-4xl font-bold mb-6">Corpus Page</h1>
-
-              {/* Text */}
-              <div className='bg-white rounded-lg shadow-lg p-8 text-justify'>
-                <p className="text-lg text-gray-700 mb-4">The corpus page is a section of the application that focuses on managing text corpora. A corpus is a collection of texts, documents, or conversations used for linguistic or other types of analysis. In the context of the application, corpora are collections of texts related to a specific topic, such as biomedicine or linguistics.</p>
-                <p className="text-lg text-gray-700 mb-4">The corpus page allows users to create, edit, and delete text corpora. They can also add individual documents to the corpus or import sets of documents in zip format. Additionally, users can view and filter the list of available corpora based on various criteria, such as name, language, or number of documents.</p>
-                <p className="text-lg text-gray-700 mb-4">With the corpus page, researchers and analysts can easily organize and curate large-scale text data and use it for various purposes, such as language modeling, information retrieval, or natural language processing.</p>
-
-              {/* End Text */}
-              </div>
-              
-              {/* Buttons */}
-              <div className="flex justify-center space-x-4 mt-8">
-
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition-all duration-500 transform hover:scale-110">
-                  <Link href='/corpus/insert'>
-                    Insert a Corpus
-                  </Link>
-                </button>
-                
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition-all duration-500 transform hover:scale-110">
-                  <Link href='/corpus/list'>
-                    List Corpus
-                  </Link>
-                </button>
-
-              {/* End Buttons */}
-              </div>
-
+    <div className="flex flex-col">
+      <div className="flex-grow">
+        <div className="flex flex-col items-center justify-center my-8">
+          <div className="text-center w-10/12">
+            <h1 className="text-4xl font-bold mb-6">Analyze</h1>
+            <p className='mb-10'>Here are some corpus, you can see the complete information by pressing some card.</p>
+            {/* Corpus Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {corpusData.map((corpus) => (
+                <Card key={corpus.id}>
+                  <CardContent>
+                    <Typography variant="h5" component="h2">
+                      Corpus name: {corpus.corpus_name}
+                    </Typography>
+                    <Typography color="textSecondary" gutterBottom>
+                      Labels: {corpus.labels}
+                    </Typography>
+                    <Typography variant="body2" component="p">
+                      Description: {corpus.description}
+                    </Typography>
+                    <Typography variant="body2" component="p">
+                      Version: {corpus.version}
+                    </Typography>
+                    <Typography variant="body2" component="p">
+                      Number of Documents: {corpus.numDocuments}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
+            {/* End Corpus Cards */}
 
           </div>
-
-        {/* End Content */}
         </div>
-
-
-      {/* End Main Div */} 
       </div>
-    </Layout>
+    </div>
+  </Layout>
   );
 }
 
