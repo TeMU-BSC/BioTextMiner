@@ -39,8 +39,8 @@ def login():
         print(response)
 
         if response:
-            access_token = create_access_token(identity=username)
-            print(access_token)
+            # access_token = create_access_token(identity=username)
+            # print(access_token)
             # If correct, return success message
             return jsonify({"message": "Login successfull", "err":"false", "data":response})
         

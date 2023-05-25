@@ -15,7 +15,7 @@ This module contains the BioTextMiner API.
 from flask import Flask
 from application import app
 from flask_cors import CORS
-from flask_jwt_extended import JWTManager, jwt_required, create_access_token
+# from flask_jwt_extended import JWTManager, jwt_required, create_access_token
 
 # Configparser settings
 # ----------------------------------------------------------------------
@@ -29,8 +29,8 @@ parameters.read('./configuration.cfg')
 # ----------------------------------------------------------------------
 if __name__=="__main__": 
 
-    app.config['JWT_SECRET_KEY'] = 'secretkey'
-    jwt = JWTManager(app)   
+    # app.config['JWT_SECRET_KEY'] = 'secretkey'
+    # jwt = JWTManager(app)   
     
     CORS(app)                  
     app.run(debug=True) 
