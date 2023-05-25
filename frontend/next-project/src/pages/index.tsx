@@ -34,7 +34,7 @@ const HomePage = () => (
 
       {/* Section welcome */}
       <section>
-      <div className=" justify-center items-center w-8/12 mx-auto my-8">
+      <div className="justify-center items-center mx-auto my-8 px-60">
           <div className="text-center">
           <h1 className="text-4xl font-bold mb-6">Welcome to BioTextMiner</h1>
           
@@ -47,10 +47,10 @@ const HomePage = () => (
 
       {/* Section image */}
       <section>
-      <div className="max-w-screen-lg mx-auto">
-          <div className="bg-white rounded-md overflow-hidden shadow-md">
+      <div className="max-w-screen-lg mx-auto mb-10">
+          <div className="bg-white rounded-md overflow-hidden shadow-2xl">
           <Image
-              className="object-cover"
+              className="object-cover mx-auto"
               src="/../public/nlp.jpg"
               alt="Picture of the author"
               width={800}
