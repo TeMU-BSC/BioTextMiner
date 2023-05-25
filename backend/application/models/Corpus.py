@@ -19,16 +19,20 @@ from application.config.database import get_connection # Import the database con
 def select_corpus():
     # get connection    
     conexion = get_connection()
+    resp = []
 
     # cursor
     with conexion.cursor() as cursor:
 
         # execute command
-        cursor.execute("select * from corpus limit 3")
+        cursor.execute("select * from corpus")
+        row_headers = [x[0] for x in cursor.description] #this will extract row headers
 
     # fetchall and return the data
         data = cursor.fetchall()
-        return data
+        for dat in data:
+            resp.append(dict(zip(row_headers,dat)))
+        return resp
     
     
 # Select top corpus
