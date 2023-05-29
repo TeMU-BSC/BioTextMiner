@@ -207,10 +207,10 @@ const SearchDocs = () => {
             {selectedResult !== null && (
               <div className="ml-9 p-4 bg-gray-200 rounded-lg">
                 <h2 className="text-lg font-bold mb-2">{selectedResult.name}</h2>
-                <p>Id document. {selectedResult.id}.</p>
+                <p className="font-bold mb-2">Id document. {selectedResult.id}.</p>
 
-                <p>This is the data for {selectedResult.name}.</p>
-
+                <p className="mb-2">This is the data for {selectedResult.name}.</p>
+                <p className="text-justify">{selectedResult.data.substring(0,300)+"..."}</p>
                 <button
                     onClick={() => router.push(`/view/${selectedResult.id}`)}
                     className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
