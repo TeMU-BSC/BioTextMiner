@@ -17,7 +17,7 @@ import { Card, CardContent, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 interface Corpus {
-  id: number;
+  corpus_id: number;
   corpus_name: string;
   labels: string[];
   description: string;
@@ -60,28 +60,30 @@ const AnalyzePage = () => {
             <p className='mb-10'>Here are some corpus, you can see the complete information by pressing some card.</p>
             {/* Corpus Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {corpusData.map((corpus) => (
-                <Card key={corpus.id}>
-                  <CardContent>
-                    <Typography variant="h5" component="h2">
-                      Corpus name: {corpus.corpus_name}
-                    </Typography>
-                    <Typography color="textSecondary" gutterBottom>
-                      Labels: {corpus.labels}
-                    </Typography>
-                    <Typography variant="body2" component="p">
-                      Description: {corpus.description}
-                    </Typography>
-                    <Typography variant="body2" component="p">
-                      Version: {corpus.version}
-                    </Typography>
-                    <Typography variant="body2" component="p">
-                      Number of Documents: {corpus.numDocuments}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                {corpusData.map((corpus) => (
+                  <Link key={corpus.corpus_id} href={`/analyze/${corpus.corpus_id}`} passHref>
+                      <Card>
+                        <CardContent>
+                          <Typography variant="h5" component="h2">
+                            Corpus name: {corpus.corpus_name}
+                          </Typography>
+                          <Typography color="textSecondary" gutterBottom>
+                            Labels: {corpus.labels}
+                          </Typography>
+                          <Typography variant="body2" component="p">
+                            Description: {corpus.description}
+                          </Typography>
+                          <Typography variant="body2" component="p">
+                            Version: {corpus.version}
+                          </Typography>
+                          <Typography variant="body2" component="p">
+                            Number of Documents: {corpus.numDocuments}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                  </Link>
+                ))}
+              </div>
             {/* End Corpus Cards */}
 
           </div>
