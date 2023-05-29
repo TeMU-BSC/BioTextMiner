@@ -572,7 +572,57 @@ def search():
         result = search_in_elastic(keyword)
         print(result)
         return jsonify(result)
-    
+
+
+# Route to get document data by id
+# -----------------------------------------------------------------------
+@app.route('/search-document/<string:id>', methods=['GET'])
+def search_document(id):
+    try:
+        document = get_document_from_elasticsearch(id)
+        print(document)
+        if document is not None:
+            return jsonify(document)
+        else:
+            return jsonify({'error': 'Document not found'}), 404
+    except Exception as e:
+        error_message = "Error searching document in Elasticsearch: {}".format(str(e))
+        return jsonify({'error': error_message}), 500
+
+
+# Function to get document data in elasticsearch
+# ------------------------------------------------------------------------
+def get_document_from_elasticsearch(document_id):
+    try:
+        # Create Elasticsearch client
+        es = Elasticsearch()
+
+        # Define the search query
+        body = {
+            "query": {
+                "term": {
+                    "_id": document_id
+                }
+            }
+        }
+
+        # Search for the document by ID
+        res = es.search(index="documents", body=body)
+
+        # Get the document from the search results
+        hits = res['hits']['hits']
+        if hits:
+            document = hits[0]['_source']
+            return document
+        else:
+            return None
+
+    except Exception as e:
+        # Handle any exceptions that occur during the search
+        error_message = "Error retrieving document from Elasticsearch: {}".format(str(e))
+        return None
+
+
 
 # ---------------------------- TODO -------------------------------------
 def search_in_elastic(keyword):
