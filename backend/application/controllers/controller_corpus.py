@@ -16,6 +16,7 @@ from flask import Flask,jsonify,request
 
 # Import Model for corpus
 import application.models.Corpus as Corpus
+import application.models.Document as Document
 
 
 #----------------------------------------------------------------------------#
@@ -205,4 +206,26 @@ def select_corpus_documents(textid):
 # 127.0.0.1:5000/corpus-by-document/10
 # 127.0.0.1:5000/corpus-by-document/2
 
-# Method GET
+# Method 
+
+
+
+
+
+
+# Route to select a coprus by id
+# -------------------------------------------------------------
+@app.route('/corpus_data/<string:id>', methods=['GET'])
+def corpus_data(id):
+    # text_id = request.json["text_id"]
+
+    corpus_data = Corpus.select_where(id)
+
+    documents_data = Document.select_txt_by_corpus(id)
+
+    # If the document data is available, return themm
+    if corpus_data!=None:
+        return jsonify({"result": corpus_data, "resultdoc" : documents_data})
+    else:
+        
+        return jsonify({"result":"no data"})
