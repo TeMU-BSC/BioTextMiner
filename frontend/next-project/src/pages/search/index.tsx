@@ -11,9 +11,21 @@
  * React library, useState
  */
 import Layout from "@/components/Layout";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 
+/**
+ * @interface SearchResult
+ * @description interface for results
+ */
+interface SearchResult {
+    id:string;
+    name: string;
+    data: string;
+}
+  
+  
 /**
  * @constant SearchDocs
  * @returns html page
@@ -24,9 +36,15 @@ const SearchDocs = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [keyword, setKeyword] = useState(''); // query passed in the searc
     const [message, setMessage] = useState(''); // message to show of results found
-    const [results, setResults] = useState<string[]>([]); // results to show
-    const [selectedResult, setSelectedResult] = useState<string | null>(null);  // selected Result
+    const [results, setResults] = useState<SearchResult[]>([]);
+    const [selectedResult, setSelectedResult] = useState<SearchResult | null>(
+      null
+    );
     const [errors, setErrors] = useState('')
+
+    // Next router
+    const router = useRouter();
+
     /**
      * @constant handleSubmit
      * @param event
@@ -157,61 +175,54 @@ const SearchDocs = () => {
             </div>
 
             {isLoading ? (
-                <>
-                    <div className="p-10">
-                        <div className="loader"></div> 
-                    </div>
-                </>
+              <div className="p-10">
+                <div className="loader"></div>
+              </div>
             ) : (
-                <>
-                {/* Results */}
-                <div className="grid grid-cols-1 gap-5 mt-8">
-                    {/* {results.map((result) => (
-                    <div key={result} className={`bg-gray-200 p-4 rounded-lg ${selectedResult === result ? 'border-2 border-blue-500' : ''}`}>
-                    <label>
-                        <input type="checkbox" checked={selectedResult === result} onChange={() => setSelectedResult(result)} />
-                        <span className="ml-2">{result}</span>
-                    </label>
-                    </div>
-                    ))} */}
-                {/* End Results */}
-
+              <div className="grid grid-cols-1 gap-5 mt-8">
                 <ul>
-                    {results.map(result => (
-                        <div key={result} className={`bg-gray-200 p-4 rounded-lg m-2 ${selectedResult === result ? 'border-2 border-blue-500' : ''}`}>
-                        <label>
-                            <input type="checkbox" checked={selectedResult === result} onChange={() => setSelectedResult(result)} />
-                            <h1>{result.name}</h1>
-                            <span className="ml-2">{result.data.substring(0, 100)+'...'}</span>
-                        </label>
-                        </div>
-                    ))}
+                  {results.map((result) => (
+                    <div
+                      key={result.name}
+                      className={`bg-gray-200 p-4 rounded-lg m-2 ${
+                        selectedResult === result ? "border-2 border-blue-500" : ""
+                      }`}
+                    >
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={selectedResult === result}
+                          onChange={() => setSelectedResult(result)}
+                        />
+                        <h1>{result.name}</h1>
+                        <span className="ml-2">{result.data.substring(0, 100) + "..."}</span>
+                      </label>
+                    </div>
+                  ))}
                 </ul>
-                </div>
-                </>
+              </div>
             )}
+          </div>
+          <div className="basis-1/2">
+            {selectedResult !== null && (
+              <div className="ml-9 p-4 bg-gray-200 rounded-lg">
+                <h2 className="text-lg font-bold mb-2">{selectedResult.name}</h2>
+                <p>Id document. {selectedResult.id}.</p>
 
+                <p>This is the data for {selectedResult.name}.</p>
 
-            {/* End Searching (Search and results) */}
-            </div>
-
-            {/* Selected Result */}
-            <div className="basis-1/2">
-                        {selectedResult !== null && (
-                            <div className="ml-9 p-4 bg-gray-200 rounded-lg">
-                            <h2 className="text-lg font-bold mb-2">{selectedResult}</h2>
-                            <p>This is the data for {selectedResult}.</p>
-                            </div>
-                        )}
-            {/* End Selected Result */}
-            </div>
-        {/* End Search (Results, search, and selected)*/}
+                <button
+                    onClick={() => router.push(`/view/${selectedResult.id}`)}
+                    className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                >
+                    View Document
+                </button>
+              </div>
+            )}
+          </div>
         </div>
         {errors}
-
-        {/* End General Div*/}
-        </div>
-
+      </div>
     </Layout>
     );
 }
