@@ -289,3 +289,26 @@ def insert_doc_name(name:str):
 
     return data
     #return(str(cursor.rowcount)+ " record(s) updated")
+
+
+
+# Documents by corpus:
+# Dashboard table
+# --------------------------------------------------------------------
+def select_txt_by_corpus(corpusid):
+    '''
+    Input parameters: corpus id to search the documents of a specific corpus
+    '''
+
+    # get connection
+    conexion = get_connection()
+
+    # cursor
+    with conexion.cursor() as cursor:
+
+        # execute command
+        cursor.execute("SELECT d.* FROM documents AS d JOIN document_corpus AS dc ON d.text_id = dc.text_id WHERE dc.corpus_id=%s", corpusid)
+
+    # fetchall and return the data
+        data = cursor.fetchall()
+        return data
