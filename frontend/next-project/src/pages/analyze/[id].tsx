@@ -37,23 +37,22 @@ const Corpus = () => {
     const result = await axios(`http://localhost:5000/corpus/${id}`);
     console.log(id)
     console.log(result.data.result[0])
+    
 
-
-    setCorpusData(result.data);
+    setCorpusData(result.data.result[0]);
     setName(result.data.result[0][1])
-    setLabels(result.data.result[0][2])
-    setDesc(result.data.result[0][3])
-    setVersion(result.data.result[0][4])
-    if ((result.data.result[0][5]) != null) {
+    // setLabels(result.data.result[0][2])
+    // setDesc(result.data.result[0][3])
+    // setVersion(result.data.result[0][4])
+    // if ((result.data.result[0][5]) != null) {
       setNum(result.data.result[0][5])
 
-    } else {
-      setNum('0')
-    }
-
-
-
+    // } else {
+    //   setNum('0')
+    // }
   };
+
+  
   // console.log(result.data)
   console.log(name)
 
@@ -64,6 +63,9 @@ const Corpus = () => {
       <div>
         <h1 className='text-3xl font-bold text-center mt-10'>Dashboard</h1>
       </div>
+      <p> Corpus Name: {name}</p>
+      <p> Corpus Id: {id}</p>
+
       {/* <div className="m-8 max-w-5xl mx-auto p-6 bg-white shadow-md rounded-lg">
         <h1 className="font-bold text-2xl mb-4">Corpus {name}</h1>
         <div className="grid grid-cols-2 gap-4">
