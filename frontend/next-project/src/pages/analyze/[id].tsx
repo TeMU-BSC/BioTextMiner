@@ -7,8 +7,9 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Layout from '@/components/Layout';
-import { Card, CardContent, Typography } from '@mui/material';
-
+import { Card, CardContent, Typography, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
+import { List, ListItem, ListItemText } from '@mui/material';
+import Link from 'next/link';
 
 /**
  * @const Corpus
@@ -17,109 +18,118 @@ import { Card, CardContent, Typography } from '@mui/material';
 const Corpus = () => {
   const router = useRouter();
   const { id } = router.query;
-  const [corpusData, setCorpusData] = useState(null);
+  const [corpusData, setCorpusData] = useState<any>(null);
+  
+  const fetchData = async () => {
+    try {
+      const result = await axios(`http://localhost:5000/corpus_data/${id}`);
+      setCorpusData(result.data);
 
-  const [name, setName] = useState('')
-  const [labels, setLabels] = useState('')
-  const [description, setDesc] = useState('')
-  const [vers, setVersion] = useState('')
-  const [num_docs, setNum] = useState('')
+    } catch (error) {
+      console.error('Error fetching corpus data:', error);
+    }
+  };
 
   useEffect(() => {
-
-
     if (id) {
       fetchData();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  const fetchData = async () => {
-    const result = await axios(`http://localhost:5000/corpus/${id}`);
-    console.log(id)
-    console.log(result.data.result[0])
-    
-
-    setCorpusData(result.data.result[0]);
-    setName(result.data.result[0][1])
-    // setLabels(result.data.result[0][2])
-    // setDesc(result.data.result[0][3])
-    // setVersion(result.data.result[0][4])
-    // if ((result.data.result[0][5]) != null) {
-      setNum(result.data.result[0][5])
-
-    // } else {
-    //   setNum('0')
-    // }
-  };
-
-  
-  // console.log(result.data)
-  console.log(name)
-
+  const labels = corpusData?.result[0][3]?.split(','); // Split labels by comma
 
   return (
     <Layout>
-
       <div>
-        <h1 className='text-3xl font-bold text-center mt-10'>Dashboard</h1>
+        <h1 className='text-4xl font-bold text-center mt-10'>Dashboard</h1>
       </div>
-      <p> Corpus Name: {name}</p>
-      <p> Corpus Id: {id}</p>
 
-      {/* <div className="m-8 max-w-5xl mx-auto p-6 bg-white shadow-md rounded-lg">
-        <h1 className="font-bold text-2xl mb-4">Corpus {name}</h1>
-        <div className="grid grid-cols-2 gap-4">
-          <p className="text-gray-600 font-medium">Corpus Id:</p>
-          <p>{id}</p>
-          <p className="text-gray-600 font-medium">Description:</p>
-          <p>{description}</p>
-          <p className="text-gray-600 font-medium">Labels:</p>
-          <p>{labels}</p>
-          <p className="text-gray-600 font-medium">Version:</p>
-          <p>{vers}</p>
-          <p className="text-gray-600 font-medium">Number of documents:</p>
-          <p>{num_docs}</p>
+      {corpusData && (
+        <div className=" m-8 max-w-5xl mx-auto p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-10"> 
+          <Card className='bg-gradient-to-r from-green-300 to-blue-300'>
+            <CardContent>
+              <Typography variant="h5" component="h2" className='text-center p-6 font-bold'>
+                {corpusData.result[0][1]}
+              </Typography>
+              <Typography variant="h5" component="h2" className='text-center'>
+                Name of corpus
+              </Typography>
+            </CardContent>
+          </Card>
+
+          <Card className='bg-gradient-to-r from-green-300 to-blue-300'>
+            <CardContent>
+              <Typography variant="h5" component="h2" className='text-center p-6 font-bold'>
+                {corpusData.result[0][5]}
+              </Typography>
+              <Typography variant="h5" component="h2" className='text-center'>
+                Number of documents
+              </Typography>
+            </CardContent>
+          </Card>
+
+          <Card className='bg-gradient-to-r from-green-300 to-blue-300'>
+            <CardContent>
+              <Typography variant="h5" component="h2" className='text-center p-6 font-bold'>
+                0
+              </Typography>
+              <Typography variant="h5" component="h2" className='text-center'>
+                Number of annotations
+              </Typography>
+            </CardContent>
+          </Card>
         </div>
+      )}
+
+      {/* List Labels */}  
+      <div className='m-8 max-w-5xl mx-auto p-6'>
+      <h2 className='text-2xl'>Documents associated:</h2>
+        <List>
+          {labels && labels.map((label:any, index:any) => (
+            <ListItem key={index}>
+              <ListItemText primary={label.trim()} />
+            </ListItem>
+          ))}
+        </List>
       </div>
 
+      {/* Table documents by corpus */}
       <div className='m-8 max-w-5xl mx-auto p-6 bg-white shadow-md rounded-lg'>
-        <h2 className='text-2xl'>Documents asociated:</h2>
-      </div> */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-10"> 
-
-      <Card className='bg-blue-100'>
-        <CardContent>
-          <Typography variant="h5" component="h2" className='text-center'>
-            {name}
-          </Typography>
-          <Typography variant="h5" component="h2" className='text-center'>
-            Name of corpus
-          </Typography>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardContent>
-          <Typography variant="h5" component="h2" className='text-center'>
-            {num_docs}
-          </Typography>
-          <Typography variant="h5" component="h2" className='text-center'>
-            Number of documents
-          </Typography>
-        </CardContent>
-      </Card>
-
-
-      <Card>
-        <CardContent>
-          <Typography variant="h5" component="h2" className='text-center'>
-            0
-          </Typography>
-          <Typography variant="h5" component="h2" className='text-center'>
-            Number of annotations
-          </Typography>
-        </CardContent>
-      </Card>
+        <h2 className='text-2xl'>Documents associated:</h2>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Text ID</TableCell>
+                <TableCell>Document Name</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Author</TableCell>
+                <TableCell>Source</TableCell>
+                <TableCell>Collection</TableCell>
+                <TableCell>Language</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {corpusData &&
+                corpusData.resultdoc.map((doc:any) => (
+                  <TableRow key={doc[0]}>
+                    <TableCell>{doc[0]}</TableCell>                    
+                    <TableCell>
+                      <Link href={`/view/${doc[0]}`} className="text-blue-600 font-bold underline text-lg">
+                        {doc[1]}
+                      </Link>
+                    </TableCell>
+                    <TableCell>{doc[2]}</TableCell>
+                    <TableCell>{doc[3]}</TableCell>
+                    <TableCell>{doc[4]}</TableCell>
+                    <TableCell>{doc[5]}</TableCell>
+                    <TableCell>{doc[6]}</TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
     </Layout>
   );
