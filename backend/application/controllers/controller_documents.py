@@ -570,7 +570,6 @@ def search():
         return jsonify({'error': "No data received"}), 400
     else:
         result = search_in_elastic(keyword)
-        print(result)
         return jsonify(result)
 
 
@@ -580,7 +579,6 @@ def search():
 def search_document(id):
     try:
         document = get_document_from_elasticsearch(id)
-        print(document)
         if document is not None:
             return jsonify(document)
         else:
@@ -590,32 +588,37 @@ def search_document(id):
         return jsonify({'error': error_message}), 500
 
 
+
 # Function to get document data in elasticsearch
 # ------------------------------------------------------------------------
 def get_document_from_elasticsearch(document_id):
+
     try:
         # Create Elasticsearch client
-        es = Elasticsearch()
+        ec = elastic()
 
         # Define the search query
         body = {
             "query": {
                 "term": {
-                    "_id": document_id
+                "id": {
+                    "value": document_id
+                }
                 }
             }
         }
 
         # Search for the document by ID
-        res = es.search(index="documents", body=body)
+        res = ec.client.search(index="documents", body=body)
 
-        # Get the document from the search results
+
+        # Get result
         hits = res['hits']['hits']
-        if hits:
-            document = hits[0]['_source']
-            return document
-        else:
-            return None
+        result = [{'id': hit['_id'], 'data': hit['_source']['data'], 'name': hit['_source']['name']} for hit in hits]
+
+        # Return the result in json format
+        return (result)
+
 
     except Exception as e:
         # Handle any exceptions that occur during the search
