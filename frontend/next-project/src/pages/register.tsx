@@ -1,7 +1,6 @@
-import NavBar from '../components/Navbar'
 import { useState } from 'react';
 import Link from 'next/link';
-import Footer from '@/components/footer';
+import Layout from '@/components/Layout';
 
 
 export default function RegisterPage() {
@@ -41,8 +40,8 @@ export default function RegisterPage() {
 
 
 return (
+  <Layout>
   <div>
-      <NavBar />
       
       <form onSubmit={handleSubmit} className="w-80 flex flex-col space-y-4 mx-auto ">
         <label className='text-center m-6 text-sky-400/100 text-3xl font-extrabold underline'>Register</label>
@@ -126,7 +125,7 @@ return (
           </div>
         </div>
       </form>
-      <Footer></Footer>
     </div>
+    </Layout>
   )
 }
