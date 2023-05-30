@@ -401,14 +401,14 @@ def manage_file(file_name, archive_file):
         # print('-The file is an annotation file')
 
         # Get annotation data and insert
-        #ann_data = manage_annotations(archive_file, file_name)
-        #result = Annotation.insert_annzip_data(ann_data)
+        ann_data = manage_annotations(archive_file, file_name)
+        result = Annotation.insert_annzip_data(ann_data)
 
         # To check
-        # print(ann_data[0:5])
+        print(ann_data[0:5])
 
         # Insert the documents names in the database
-        # res = Document.insert_doczip_data(file[1])
+        res = Document.insert_doczip_data(file[1])
 
     else:
         print('-The file is not valid for this action')
