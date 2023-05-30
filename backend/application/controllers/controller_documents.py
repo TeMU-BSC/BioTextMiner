@@ -37,6 +37,10 @@ import rarfile
 from elasticsearch import Elasticsearch
 from elasticsearch.exceptions import ConnectionTimeout
 
+# Spacy
+import spacy
+from spacy import displacy
+
 # Configparser settings
 import configparser
 parameters = config = configparser.ConfigParser()
@@ -711,3 +715,105 @@ def searching():
 
     # Return filtered results according the searchin, json format
     return jsonify(filtered_results)
+
+
+
+# ----------------------------- SPACY --------------------------------
+# STEPS
+# 1. Obtener el texto en elasticsearch a partir del textid 
+# 2. Obtener anotaciones en la base de datos, a partir de la textid
+# 3. Generar las anotaciones en el texto
+nlp = spacy.load("es_core_news_sm")
+
+
+# Function to get annotations
+
+def obtener_anotaciones(text_id):
+    # Aquí debes implementar la lógica para obtener las anotaciones de la base de datos
+    anotaciones = Annotation.select_annotations_by_document(text_id)
+
+    return anotaciones
+
+@app.route('/annotations/<string:text_id>', methods=['GET'])
+def get_annotations(text_id):
+    # Obtener el texto del documento desde la base de datos
+    texto = get_document_from_elasticsearch(text_id)
+
+    # Obtener las anotaciones de la base de datos
+    anotaciones = obtener_anotaciones(text_id)
+
+    # Crear una lista de tuplas (start, end, label) con las anotaciones
+    anotaciones_displacy = []
+    for anotacion in anotaciones:
+        anotacion_displacy = (anotacion.start_span, anotacion.end_span, anotacion.ann_text)
+        anotaciones_displacy.append(anotacion_displacy)
+
+    # Procesar el texto con el modelo de spaCy
+    doc = nlp(texto)
+
+    # Generar la visualización de las anotaciones con displacy
+    html = displacy.render(doc, style="ent", options={"ents": anotaciones_displacy})
+
+    return jsonify({"html": html})
+
+
+# Testing
+texto_de_prueba = "Este es un texto de prueba. Contiene varias frases y entidades nombradas."
+anotaciones_de_prueba = [
+    {
+        "ann_id": 1,
+        "corpus_id": None,
+        "text_id": 1,
+        "ann_text": "entidades nombradas",
+        "start_span": 41,
+        "end_span": 61,
+        "norm_id": None,
+        "attributes": "tipo: PERSONA",
+        "mark": "T1"
+    },
+    {
+        "ann_id": 2,
+        "corpus_id": None,
+        "text_id": 1,
+        "ann_text": "texto de prueba",
+        "start_span": 16,
+        "end_span": 31,
+        "norm_id": None,
+        "attributes": "tipo: DESCRIPCION",
+        "mark": "T2"
+    }
+]
+
+# Ruta para obtener las anotaciones de un texto específico y realizar la visualización con displacy
+@app.route("/annotationss/<int:text_id>")
+def obtener_anotaciones(text_id):
+    anotaciones = [anotacion for anotacion in anotaciones_de_prueba if anotacion["text_id"] == text_id]
+
+    # Obtener el texto correspondiente al text_id
+    texto = texto_de_prueba  # Reemplaza esto con la lógica para obtener el texto de tu base de datos
+
+    # Crear el objeto Doc de spaCy a partir del texto
+    doc = nlp(texto)
+
+    # Añadir las anotaciones al objeto Doc
+    for anotacion in anotaciones:
+        start = anotacion["start_span"]
+        end = anotacion["end_span"]
+        label = anotacion["attributes"]
+        span = doc.char_span(start, end, label=label)
+        
+        if span is not None:
+            doc.ents = list(doc.ents) + [span]
+
+    # Realizar la visualización con displacy y obtener el HTML resultante
+    html = displacy.render(doc, style="ent", options={"compact": True})
+
+    return html
+
+
+# @app.route("/displacy")
+# def displacy():
+
+#     # doc = nlp("This is a sentence about Google.")
+#     doc.user_data["title"] = "This is a title"
+    # displacy.serve(doc, style="ent")
