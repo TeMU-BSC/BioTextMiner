@@ -810,10 +810,16 @@ def obtener_anotaciones(text_id):
 
     return html
 
+from spacy.pipeline import EntityRuler
+@app.route('/anotaciones')
+def mostrar_anotaciones():
+    texto = "Este es un ejemplo de texto con algunas anotaciones. Las anotaciones deben diferenciarse del resto del texto."
 
-# @app.route("/displacy")
-# def displacy():
 
-#     # doc = nlp("This is a sentence about Google.")
-#     doc.user_data["title"] = "This is a title"
-    # displacy.serve(doc, style="ent")
+    # Procesar el texto con el modelo de SpaCy
+    doc = nlp(texto)
+
+    # Obtener las anotaciones en formato HTML utilizando displacy
+    anotaciones = displacy.render(doc, style="ent", options={"compact": True, "color": "blue"})
+    print(anotaciones)
+    return anotaciones
