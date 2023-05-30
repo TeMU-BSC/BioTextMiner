@@ -25,6 +25,7 @@ const FileUploadForm: React.FC = () => {
   // Definitions
   const [file, setFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState('');
+  const [formMessage, setFormMessage] = useState('');
 
 
   // Handle file input change
@@ -58,10 +59,14 @@ const FileUploadForm: React.FC = () => {
 
       // Set file name to show once is uploaded
       setFileName(file.name);
-      console.log(response);
+      console.log(response.data);
+      setFormMessage(response.data);
+
 
     } catch (error) {
       console.error(error);
+      setFormMessage('An error occurred');
+
     }
   };
 
@@ -105,6 +110,8 @@ const FileUploadForm: React.FC = () => {
             Submit
           </button>
         </form>
+
+        {formMessage && <p className="text-center text-green-500 m-2">{formMessage}</p>}
 
       </div>
 
