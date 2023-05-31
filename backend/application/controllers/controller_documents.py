@@ -722,7 +722,7 @@ def searching():
 # STEPS
 # 1. Obtener el texto en elasticsearch a partir del textid 
 # 2. Obtener anotaciones en la base de datos, a partir de la textid
-# 3. Generar las anotaciones en el texto
+# 3. Generar las anotaciones en el textoo
 nlp = spacy.load("es_core_news_sm")
 
 
@@ -823,3 +823,13 @@ def mostrar_anotaciones():
     anotaciones = displacy.render(doc, style="ent", options={"compact": True, "color": "blue"})
     print(anotaciones)
     return anotaciones
+
+@app.route('/anns')
+def my_annotations():
+    doc = nlp.make_doc(text) # create doc object from text
+            ents = []
+            for start, end, label in annot["entities"]: # add character indexes
+                span = doc.char_span(start, end, label=label, alignment_mode="contract")
+                if span is not None:
+                    ents.append(span)
+            doc.spans["sc"] = ents # label the text with the ents
