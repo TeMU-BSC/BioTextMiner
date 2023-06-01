@@ -71,6 +71,22 @@ def select_documents_data():
         return jsonify({"result":"no data available"})
 
 
+# Route to select documents with optional search parameter
+@app.route('/api/documents', methods=['GET'])
+def select_documents_dataa():
+    search_term = request.args.get('search')
+    print(search_term)
+    try:
+        # use the function in Document model with search term
+        response = Document.select_document_byname(search_term)
+
+        # return the documents as the response
+        return jsonify({"result": "ok finding documents", "response": response})
+    except:
+        # error message as the result
+        return jsonify({"result": "no data available"})
+
+
 # Route to select a document by id
 # -------------------------------------------------------------
 @app.route('/documents/<string:id>', methods=['GET'])
@@ -297,24 +313,30 @@ def upload():
 # -----------------------------------------------------------------------
 def extract_files(archive_file):
 
-    # print(archive_file.namelist())
+    print('test1')
+
 
     # For each files in the files list
     for file_name in archive_file.namelist():
+        manage_file(file_name, archive_file)
+        # print(archive_file.namelist()[-1])
+        # print(file_name)
+        # if (os.path.isfile(file_name)):
+        #     print('ok')
 
-        # Check if the file is a directory or not
 
-        # If it is a directoy, manage the directory with a the "manage_directory" function.
-        if os.path.isdir(file_name):
-
-            # Get the names and insert in database
-            manage_directory(file_name)
+        # # If it is a directoy, manage the directory with a the "manage_directory" function.
+        # if os.path.isdir(file_name):
+        #     print('test2')
+        #     # Get the names and insert in database
+        #     manage_directory(file_name)
             
-        # If it not a directory, manage with the "manage_file" function:
-        elif os.path.isfile(file_name):
+        # # If it not a directory, manage with the "manage_file" function:
+        # elif os.path.isfile(file_name):
+        #     print('test3')
 
             # Manage files. Annotations and txt
-            manage_file(file_name, archive_file)
+#             manage_file(file_name, archive_file)
 
 
 # Function to get data of the directories names and store in the database
@@ -323,7 +345,7 @@ def manage_directory(file_name):
     '''
     Input Parameters: The directory filename
     '''
-    
+    print('testdir')
     # Get specialty names
     names = os.path.split(file_name)
 
@@ -343,9 +365,8 @@ def manage_file(file_name, archive_file):
                       - The archive file contains all the files (directory and subdirectories)
     '''
 
-    # ------ For testing ------
-    #print(file_name)
-    #print(archive_file.namelist())
+    print('testfile')
+
 
     # Split file name, 0 position is the directory and -1 position the file
     file = file_name.split("/")
@@ -412,7 +433,7 @@ def manage_file(file_name, archive_file):
         print(ann_data[0:5])
 
         # Insert the documents names in the database
-        res = Document.insert_doczip_data(file[1])
+        # res = Document.insert_doczip_data(file[1])
 
     else:
         print('-The file is not valid for this action')
@@ -428,7 +449,7 @@ def manage_text(archive_file, file_name):
                         file name is the name of each file in the received folder 
     - Output parameters: data extracted from txt files.
     '''
-
+    print('testtxt')
     # Open the archive file
     with archive_file.open(file_name) as file:
 
@@ -448,12 +469,13 @@ def manage_annotations(archive_file, file_name):
                         file name is the name of all the files in the folder received
     - Output parameters: data extracted from annotation files.
     '''
+    print('testann')
 
     file = file_name.split("/")
     
     # Get the text_id of the document
     document_id = Document.select_documentid(file[1])
-    corpus = {"labels":[]}
+    # corpus = {"labels":[]}
     # print(document_id)
 
     # Open the archive file
@@ -483,8 +505,8 @@ def manage_annotations(archive_file, file_name):
                 data = mark, ann_text, start_span, end_span, attributes, document_id
 
                 result.append(data)
-                if ann_text not in corpus.labels:
-                    corpus.labels.append(ann_text)
+                # if ann_text not in corpus.labels:
+                #     corpus.labels.append(ann_text)
 
 
             
@@ -827,9 +849,9 @@ def mostrar_anotaciones():
 @app.route('/anns')
 def my_annotations():
     doc = nlp.make_doc(text) # create doc object from text
-            ents = []
-            for start, end, label in annot["entities"]: # add character indexes
-                span = doc.char_span(start, end, label=label, alignment_mode="contract")
-                if span is not None:
-                    ents.append(span)
-            doc.spans["sc"] = ents # label the text with the ents
+    ents = []
+    for start, end, label in annot["entities"]: # add character indexes
+        span = doc.char_span(start, end, label=label, alignment_mode="contract")
+        if span is not None:
+            ents.append(span)
+    doc.spans["sc"] = ents # label the text with the ents
