@@ -4,20 +4,13 @@
  * @version 1.1
  */
 
-import NavBar from '../components/Navbar'
+import Layout from '@/components/Layout';
 import Link from 'next/link';
-import Footer from '@/components/footer';
 
 const DocumentsPage = () => (
-  <>
+  <Layout>
   {/* Main Div */}
   <div className="min-h-screen flex flex-col bg-gray-100 ">
-
-    {/* NavBar */}
-    <div>
-      <NavBar />
-    {/* End NavBar */}
-    </div>
 
     {/* Content */}
     <div className="flex-grow ">
@@ -57,14 +50,10 @@ const DocumentsPage = () => (
     </div>
 
     {/* Footer */}
-    <div>
-      <Footer></Footer>
-    {/* End Footer */}
-    </div>
 
   {/* End Main Div */} 
   </div>
-  </>
+  </Layout>
 );
 
 export default DocumentsPage
