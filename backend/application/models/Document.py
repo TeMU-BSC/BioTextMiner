@@ -35,10 +35,11 @@ def select_documents():
     
 
 # Function to select documents from the database with optional search term
+# --------------------------------------------------------------------------------
 def select_document_byname(search_term=None):
     # get connection
     conexion = get_connection()
-    print(search_term)
+
     # cursor
     with conexion.cursor() as cursor:
         if search_term:

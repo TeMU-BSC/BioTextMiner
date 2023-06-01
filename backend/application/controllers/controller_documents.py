@@ -72,10 +72,10 @@ def select_documents_data():
 
 
 # Route to select documents with optional search parameter
+# -------------------------------------------------------------
 @app.route('/api/documents', methods=['GET'])
 def select_documents_dataa():
     search_term = request.args.get('search')
-    print(search_term)
     try:
         # use the function in Document model with search term
         response = Document.select_document_byname(search_term)
@@ -85,6 +85,7 @@ def select_documents_dataa():
     except:
         # error message as the result
         return jsonify({"result": "no data available"})
+
 
 
 # Route to select a document by id
@@ -740,16 +741,16 @@ def searching():
 
 
 
-# ----------------------------- SPACY --------------------------------
+# -------------------------- SPACY / DISPLACY -----------------------------
 # STEPS
 # 1. Obtener el texto en elasticsearch a partir del textid 
 # 2. Obtener anotaciones en la base de datos, a partir de la textid
 # 3. Generar las anotaciones en el textoo
+
+# Load model
 nlp = spacy.load("es_core_news_sm")
 
-
 # Function to get annotations
-
 def obtener_anotaciones(text_id):
     # Aquí debes implementar la lógica para obtener las anotaciones de la base de datos
     anotaciones = Annotation.select_annotations_by_document(text_id)
