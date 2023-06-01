@@ -34,6 +34,25 @@ def select_documents():
         return data
     
 
+# Function to select documents from the database with optional search term
+def select_document_byname(search_term=None):
+    # get connection
+    conexion = get_connection()
+    print(search_term)
+    # cursor
+    with conexion.cursor() as cursor:
+        if search_term:
+            # execute command with search term
+            cursor.execute("SELECT * FROM documents WHERE name LIKE %s", (f"%{search_term}%",))
+        else:
+            # execute command without search term
+            cursor.execute("SELECT * FROM documents")
+
+        # fetchall and return the data
+        data = cursor.fetchall()
+        return data
+
+
 # Function to select a document by id
 # --------------------------------------------------------------------------------
 def select_where(textid:str):
