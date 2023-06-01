@@ -51,11 +51,16 @@ export default function Login() {
       setError(data.error)
       setMis("Error")
     }  else {
-      // console.log(data.mis)
+      const role = data.data[6]
+
       localStorage.setItem('user', username)
+      localStorage.setItem('role', role)
+
 
       // Set cookie for logged session
       Cookies.set("loggedin", "true");
+      Cookies.set("role", role)
+
       // Cookies.set("userId", "true");
       console.log(data)
       // Cookies.set("userId", data.user.user_id);

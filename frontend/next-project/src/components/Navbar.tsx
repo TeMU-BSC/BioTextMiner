@@ -30,11 +30,14 @@ const NavBar = () => {
 
   // Perform localStorage action
   const [user, setUser] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     try {
       const userData = localStorage.getItem('user');
-
+      const role = localStorage.getItem('role') || '';
+      setIsAdmin(role === 'admin');
+      
       // If userData is True, update and set user state variable
       if(userData) {
         setUser(userData);
@@ -99,9 +102,6 @@ const NavBar = () => {
                   <Link href="/analyze" className="ml-4 px-3 py-2 rounded-md text-base font-medium">
                     Analyze
                   </Link>
-                  {/* <Link href="/documents" className="ml-4 px-3 py-2 rounded-md text-base font-medium">
-                    Documents
-                  </Link> */}
                   <button className="ml-4 px-3 py-2 rounded-md text-base font-medium" onClick={handleLogout}>
                         Logout
                   </button>
