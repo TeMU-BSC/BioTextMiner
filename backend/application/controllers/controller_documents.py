@@ -314,30 +314,32 @@ def upload():
 # -----------------------------------------------------------------------
 def extract_files(archive_file):
 
-    print('test1')
 
 
     # For each files in the files list
     for file_name in archive_file.namelist():
-        manage_file(file_name, archive_file)
-        # print(archive_file.namelist()[-1])
-        # print(file_name)
-        # if (os.path.isfile(file_name)):
-        #     print('ok')
+
+        # Testing filename
+        if file_name.endswith('/'):
+            manage_directory(file_name)
+
+        else:
+            manage_file(file_name, archive_file)
+
 
 
         # # If it is a directoy, manage the directory with a the "manage_directory" function.
         # if os.path.isdir(file_name):
-        #     print('test2')
+        #     print('jjbjbjk')
         #     # Get the names and insert in database
         #     manage_directory(file_name)
             
         # # If it not a directory, manage with the "manage_file" function:
         # elif os.path.isfile(file_name):
-        #     print('test3')
+        #     print('jjbjbjk')
 
-            # Manage files. Annotations and txt
-#             manage_file(file_name, archive_file)
+        #     # Manage files. Annotations and txt
+        #     manage_file(file_name, archive_file)
 
 
 # Function to get data of the directories names and store in the database
@@ -346,7 +348,6 @@ def manage_directory(file_name):
     '''
     Input Parameters: The directory filename
     '''
-    print('testdir')
     # Get specialty names
     names = os.path.split(file_name)
 
@@ -366,7 +367,6 @@ def manage_file(file_name, archive_file):
                       - The archive file contains all the files (directory and subdirectories)
     '''
 
-    print('testfile')
 
 
     # Split file name, 0 position is the directory and -1 position the file
@@ -401,25 +401,20 @@ def manage_file(file_name, archive_file):
             result = manage_elastic(txt_id_str, txt_name, txt_data2, "yes")
     
         # Insert the documents names in the database
-        #res = Document.insert_doczip_data(file[1])
+        # res = Document.insert_doczip_data(file[1])
 
 
     # If the file is an annotation file:
-    elif file_name.endswith('.ann'):
-        
+    if file_name.endswith('.ann'):
         file_name_only = (os.path.splitext(file_name)[0])
         new = (file_name_only + '.txt')
 
         isFile = os.path.isfile(new)
-        print(isFile)
 
         not_included = []
 
         if(isFile)==False:
             not_included.append(file_name)
-
-
-        print(not_included)
 
 
 
@@ -430,14 +425,11 @@ def manage_file(file_name, archive_file):
         ann_data = manage_annotations(archive_file, file_name)
         result = Annotation.insert_annzip_data(ann_data)
 
-        # To check
-        print(ann_data[0:5])
-
         # Insert the documents names in the database
         # res = Document.insert_doczip_data(file[1])
 
-    else:
-        print('-The file is not valid for this action')
+    # else:
+    #     print('-The file is not valid for this action')
 
 
 
@@ -470,14 +462,23 @@ def manage_annotations(archive_file, file_name):
                         file name is the name of all the files in the folder received
     - Output parameters: data extracted from annotation files.
     '''
-    print('testann')
-
+    print(file_name)
+    # Result: covid/32583150B_ES.ann
     file = file_name.split("/")
-    
+    print(file[1])
+    # Result: 32583150B_ES.ann
+
+    # Result that I want to pass: 32583150B_ES.txt
+
+    file_name_without_extension = file[1].replace(".ann", ".txt")
+    print(file_name_without_extension)
+    # Result: 32583150B_ES.txt
+
     # Get the text_id of the document
-    document_id = Document.select_documentid(file[1])
+    document_id = Document.select_documentid(file_name_without_extension)
+
     # corpus = {"labels":[]}
-    # print(document_id)
+    print(document_id)
 
     # Open the archive file
     with archive_file.open(file_name) as file:
@@ -849,10 +850,22 @@ def mostrar_anotaciones():
 
 @app.route('/anns')
 def my_annotations():
+
+    text = "Ejemplo de texto de prueba"
+    annot = {
+        "entities": [
+            (0, 7, "ORG"),   # Anotación de entidad: "Ejemplo"
+            (11, 15, "GPE") # Anotación de entidad: "texto"
+        ]
+    }
+
     doc = nlp.make_doc(text) # create doc object from text
     ents = []
     for start, end, label in annot["entities"]: # add character indexes
         span = doc.char_span(start, end, label=label, alignment_mode="contract")
         if span is not None:
             ents.append(span)
-    doc.spans["sc"] = ents # label the text with the ents
+    doc.ents = ents # label the text with the ents
+
+    html = displacy.render([doc], style="ent", options={"compact": True}) # Note the change here, passing a list with one document
+    return html

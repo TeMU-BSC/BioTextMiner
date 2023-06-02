@@ -125,12 +125,12 @@ def insert_annzip_data(ann_data):
 
     # get connection
     conexion = get_connection()
-
     # cursor
     with conexion.cursor() as cursor:
 
         # execute query
         for line in ann_data:
+            print(line)
             # print('ok')
             cursor.execute("INSERT INTO annotations(text_id, ann_text, start_span, end_span, attributes, mark) VALUES (%s, %s, %s, %s, %s, %s)",
             (line[5], line[1], line[2], line[3], line[4], line[0]))
