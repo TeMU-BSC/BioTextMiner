@@ -848,14 +848,25 @@ def mostrar_anotaciones():
     print(anotaciones)
     return anotaciones
 
+
+# Route to display text with annotations.
+# --------------------------------------------------------------
 @app.route('/anns')
 def my_annotations():
+
+    text = get_document_from_elasticsearch(809)
+    print(text)
+
+    ann = 
 
     text = "Ejemplo de texto de prueba"
     annot = {
         "entities": [
-            (0, 7, "ORG"),   # Anotación de entidad: "Ejemplo"
-            (11, 15, "GPE") # Anotación de entidad: "texto"
+            # (0, 7, "ORG"),   # Anotación de entidad: "Ejemplo"
+            (0, 7, "GPE"), # Anotación de entidad: "texto"
+            (0,7, "CRP"),
+            (8, 10, "ORG")
+
         ]
     }
 
@@ -863,9 +874,16 @@ def my_annotations():
     ents = []
     for start, end, label in annot["entities"]: # add character indexes
         span = doc.char_span(start, end, label=label, alignment_mode="contract")
+        print(span)
+        print(start, end, label)
         if span is not None:
             ents.append(span)
-    doc.ents = ents # label the text with the ents
+    doc.spans["sc"] = ents # label the text with the ents
 
-    html = displacy.render([doc], style="ent", options={"compact": True}) # Note the change here, passing a list with one document
+    # print(doc.ents)
+    html = displacy.render([doc], style="span", options={"compact": True}) # Note the change here, passing a list with one document
     return html
+    # ex = [{"text": "But Google is starting from behind.",
+    #    "spans": [{"start": 4, "end": 10, "label": "ORG"},{"start": 4, "end": 10, "label": "GRC"}],
+    #    "title": None}]
+    # html = displacy.render(ex, style="span", manual=True)
