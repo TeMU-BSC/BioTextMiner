@@ -857,7 +857,8 @@ def my_annotations():
     text = get_document_from_elasticsearch(809)
     print(text)
 
-    ann = 
+    ann = annotations_by_doc(809)
+    print(ann)
 
     text = "Ejemplo de texto de prueba"
     annot = {
@@ -874,8 +875,8 @@ def my_annotations():
     ents = []
     for start, end, label in annot["entities"]: # add character indexes
         span = doc.char_span(start, end, label=label, alignment_mode="contract")
-        print(span)
-        print(start, end, label)
+
+
         if span is not None:
             ents.append(span)
     doc.spans["sc"] = ents # label the text with the ents
@@ -887,3 +888,5 @@ def my_annotations():
     #    "spans": [{"start": 4, "end": 10, "label": "ORG"},{"start": 4, "end": 10, "label": "GRC"}],
     #    "title": None}]
     # html = displacy.render(ex, style="span", manual=True)
+
+    # To test: http://localhost:5000/anns
