@@ -30,6 +30,28 @@ def select_annotations():
     # fetchall and return the data
         data = cursor.fetchall()
         return data
+
+
+# Function to select a annotaion by id
+# --------------------------------------------------------------------------------
+def select_where(textid:str):
+    '''
+    Input parameters: 
+                    textid: id of the document to find
+    '''
+
+    # get connection
+    conexion = get_connection()
+
+    # cursor
+    with conexion.cursor() as cursor:
+
+        # execute command
+        cursor.execute("SELECT * FROM annotations WHERE text_id = %s", textid)
+
+    # commit and close the connection
+        data = cursor.fetchall()
+        return data
     
 
 # Function to select all annotations from the database of a specific document
