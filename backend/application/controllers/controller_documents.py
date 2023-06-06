@@ -748,6 +748,10 @@ def searching():
 # 2. Obtener anotaciones en la base de datos, a partir de la textid
 # 3. Generar las anotaciones en el textoo
 
+# Load model
+nlp = spacy.load("es_core_news_sm")
+
+
 # Route to display text with annotations.
 # --------------------------------------------------------------
 @app.route('/search-annotations/<string:id>', methods=['GET'])
@@ -769,6 +773,7 @@ def my_annotations(id):
         "entities": entities
     }
 
+
     # Create doc object from text
     doc = nlp.make_doc(text) 
     ents = []
@@ -776,6 +781,7 @@ def my_annotations(id):
         span = doc.char_span(start, end, label=label, alignment_mode="contract")
 
         if span is not None:
+            # span.style["background"] = "#aa9cfc"
             ents.append(span)
     
     # Label the text with the ents
