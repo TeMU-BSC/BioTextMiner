@@ -14,10 +14,10 @@ The code is structured as follows:
 - ElasticSearch : Searching server
 
 # Prerequisites
-Mysql server
-ElasticSearch server
-Node v.18
-python 3
+- Mysql server
+- ElasticSearch server
+- Node v.18
+- python 3
 
 # Usage
 ## Start Flask application
