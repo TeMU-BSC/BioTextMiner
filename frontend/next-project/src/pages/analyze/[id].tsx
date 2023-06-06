@@ -24,7 +24,7 @@ const Corpus = () => {
     try {
       const result = await axios(`http://localhost:5000/corpus_data/${id}`);
       setCorpusData(result.data);
-
+      console.log(result.data.total_annotations)
     } catch (error) {
       console.error('Error fetching corpus data:', error);
     }
@@ -61,7 +61,7 @@ const Corpus = () => {
           <Card className='bg-gradient-to-r from-green-300 to-blue-300'>
             <CardContent>
               <Typography variant="h5" component="h2" className='text-center p-6 font-bold'>
-                {corpusData.result[0][5]}
+                {corpusData.total_documents}
               </Typography>
               <Typography variant="h5" component="h2" className='text-center'>
                 Number of documents
@@ -72,7 +72,7 @@ const Corpus = () => {
           <Card className='bg-gradient-to-r from-green-300 to-blue-300'>
             <CardContent>
               <Typography variant="h5" component="h2" className='text-center p-6 font-bold'>
-                0
+              {corpusData.total_annotations}
               </Typography>
               <Typography variant="h5" component="h2" className='text-center'>
                 Number of annotations
