@@ -5,7 +5,6 @@
  * @version 1.1
  */
 
-
 /**
  * @imports
  */
@@ -15,9 +14,8 @@ import Layout from "@/components/Layout";
 
 /**
  * @interface DocumentData
- * @description interface to specify the strcuture of documents data
+ * @description interface to specify the structure of documents data
  */
-// Interfaz para especificar la estructura de los datos del documento
 interface DocumentData {
   data: string;
   id: string;
@@ -29,44 +27,42 @@ interface DocumentData {
  * @returns html
  */
 const DocumentView = () => {
-
-  // Definitions
   const router = useRouter();
   const { id } = router.query;
   const [documentData, setDocumentData] = useState<DocumentData | null>(null);
+  const [htmlContent, setHtmlContent] = useState<string | null>(null);
 
-  // useEffect
   useEffect(() => {
     if (id) {
       fetchDocumentData();
     }
   }, [id]);
 
-  /**
-   * @constant fetchDocumentData
-   */
   const fetchDocumentData = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/search-document/${id}`);
-      const data = await response.json();
-      setDocumentData(data[0]);
+      const response = await fetch(`http://localhost:5000/search-annotations/${id}`);
+
+      const html = await response.text();
+      console.log(html);
+      // const data = await response.json();
+      // console.log(data)
+      // setDocumentData(data[0]);
+      setHtmlContent(html); // Set the HTML content received from Flask
+      console
     } catch (error) {
       console.error("Error fetching document data:", error);
     }
   };
 
-  // Return html 
   return (
     <Layout>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 m-3">
         <div className="text-center p-5">
           <h1 className="text-4xl font-bold mb-4">Document View</h1>
         </div>
-        {documentData && (
+        {htmlContent && (
           <div className="ml-9 p-4 bg-gray-200 rounded-lg">
-            <h2 className="text-lg font-bold mb-2">Document ID: {id}</h2>
-            <h3 className="text-lg font-bold mb-2">Name: {documentData.name}</h3>
-            <p className="text-justify">{documentData.data}</p>
+            <div dangerouslySetInnerHTML={{ __html: htmlContent }}></div>
           </div>
         )}
       </div>

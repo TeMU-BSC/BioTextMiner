@@ -748,145 +748,41 @@ def searching():
 # 2. Obtener anotaciones en la base de datos, a partir de la textid
 # 3. Generar las anotaciones en el textoo
 
-# Load model
-nlp = spacy.load("es_core_news_sm")
-
-# Function to get annotations
-def obtener_anotaciones(text_id):
-    # Aquí debes implementar la lógica para obtener las anotaciones de la base de datos
-    anotaciones = Annotation.select_annotations_by_document(text_id)
-
-    return anotaciones
-
-@app.route('/annotations/<string:text_id>', methods=['GET'])
-def get_annotations(text_id):
-    # Obtener el texto del documento desde la base de datos
-    texto = get_document_from_elasticsearch(text_id)
-
-    # Obtener las anotaciones de la base de datos
-    anotaciones = obtener_anotaciones(text_id)
-
-    # Crear una lista de tuplas (start, end, label) con las anotaciones
-    anotaciones_displacy = []
-    for anotacion in anotaciones:
-        anotacion_displacy = (anotacion.start_span, anotacion.end_span, anotacion.ann_text)
-        anotaciones_displacy.append(anotacion_displacy)
-
-    # Procesar el texto con el modelo de spaCy
-    doc = nlp(texto)
-
-    # Generar la visualización de las anotaciones con displacy
-    html = displacy.render(doc, style="ent", options={"ents": anotaciones_displacy})
-
-    return jsonify({"html": html})
-
-
-# Testing
-texto_de_prueba = "Este es un texto de prueba. Contiene varias frases y entidades nombradas."
-anotaciones_de_prueba = [
-    {
-        "ann_id": 1,
-        "corpus_id": None,
-        "text_id": 1,
-        "ann_text": "entidades nombradas",
-        "start_span": 41,
-        "end_span": 61,
-        "norm_id": None,
-        "attributes": "tipo: PERSONA",
-        "mark": "T1"
-    },
-    {
-        "ann_id": 2,
-        "corpus_id": None,
-        "text_id": 1,
-        "ann_text": "texto de prueba",
-        "start_span": 16,
-        "end_span": 31,
-        "norm_id": None,
-        "attributes": "tipo: DESCRIPCION",
-        "mark": "T2"
-    }
-]
-
-# Ruta para obtener las anotaciones de un texto específico y realizar la visualización con displacy
-@app.route("/annotationss/<int:text_id>")
-def obtener_anotaciones(text_id):
-    anotaciones = [anotacion for anotacion in anotaciones_de_prueba if anotacion["text_id"] == text_id]
-
-    # Obtener el texto correspondiente al text_id
-    texto = texto_de_prueba  # Reemplaza esto con la lógica para obtener el texto de tu base de datos
-
-    # Crear el objeto Doc de spaCy a partir del texto
-    doc = nlp(texto)
-
-    # Añadir las anotaciones al objeto Doc
-    for anotacion in anotaciones:
-        start = anotacion["start_span"]
-        end = anotacion["end_span"]
-        label = anotacion["attributes"]
-        span = doc.char_span(start, end, label=label)
-        
-        if span is not None:
-            doc.ents = list(doc.ents) + [span]
-
-    # Realizar la visualización con displacy y obtener el HTML resultante
-    html = displacy.render(doc, style="ent", options={"compact": True})
-
-    return html
-
-from spacy.pipeline import EntityRuler
-@app.route('/anotaciones')
-def mostrar_anotaciones():
-    texto = "Este es un ejemplo de texto con algunas anotaciones. Las anotaciones deben diferenciarse del resto del texto."
-
-
-    # Procesar el texto con el modelo de SpaCy
-    doc = nlp(texto)
-
-    # Obtener las anotaciones en formato HTML utilizando displacy
-    anotaciones = displacy.render(doc, style="ent", options={"compact": True, "color": "blue"})
-    print(anotaciones)
-    return anotaciones
-
-
 # Route to display text with annotations.
 # --------------------------------------------------------------
-@app.route('/anns')
-def my_annotations():
+@app.route('/search-annotations/<string:id>', methods=['GET'])
+def my_annotations(id):
+    # Get data from elastic search
+    data_elastic = get_document_from_elasticsearch(id)
 
-    text = get_document_from_elasticsearch(809)
-    print(text)
+    # Get text
+    text = data_elastic[0]['data']
 
-    ann = annotations_by_doc(809)
-    print(ann)
 
-    text = "Ejemplo de texto de prueba"
+    # Get annotations of text
+    result = Annotation.select_annotations_by_document(id)
+
+    # Convert to entities
+    entities = [(start_span, end_span, ann_text) for (_, _, _, ann_text, start_span, end_span, _, _, _) in result]
+
     annot = {
-        "entities": [
-            # (0, 7, "ORG"),   # Anotación de entidad: "Ejemplo"
-            (0, 7, "GPE"), # Anotación de entidad: "texto"
-            (0,7, "CRP"),
-            (8, 10, "ORG")
-
-        ]
+        "entities": entities
     }
 
-    doc = nlp.make_doc(text) # create doc object from text
+    # Create doc object from text
+    doc = nlp.make_doc(text) 
     ents = []
     for start, end, label in annot["entities"]: # add character indexes
         span = doc.char_span(start, end, label=label, alignment_mode="contract")
 
-
         if span is not None:
             ents.append(span)
-    doc.spans["sc"] = ents # label the text with the ents
+    
+    # Label the text with the ents
+    doc.spans["sc"] = ents 
 
-    # print(doc.ents)
     html = displacy.render([doc], style="span", options={"compact": True}) # Note the change here, passing a list with one document
     return html
-    # ex = [{"text": "But Google is starting from behind.",
-    #    "spans": [{"start": 4, "end": 10, "label": "ORG"},{"start": 4, "end": 10, "label": "GRC"}],
-    #    "title": None}]
-    # html = displacy.render(ex, style="span", manual=True)
+    
 
     # To test: http://localhost:5000/anns
