@@ -313,6 +313,7 @@ def insert_doc_name(name:str):
 
 
 # Documents by corpus:
+# Get documents by a specific corpus
 # Dashboard table
 # --------------------------------------------------------------------
 def select_txt_by_corpus(corpusid):
