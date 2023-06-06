@@ -12,3 +12,12 @@ The code is structured as follows:
 - React (NextJs) : JavaScript library, used in the frontend
 - MySql : Relation Database
 - ElasticSearch : Searching server
+
+# Usage
+## Start Flask application
+flask --debug run
+This will start the flask app in debug mode
+
+## Start NextJs application
+npm run dev
+By default, it is started in port 8005. To change the port, modify it in package.json.
