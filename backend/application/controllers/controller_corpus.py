@@ -17,6 +17,7 @@ from flask import Flask,jsonify,request
 # Import Model for corpus
 import application.models.Corpus as Corpus
 import application.models.Document as Document
+import application.models.Annotation as Annotation
 
 
 #----------------------------------------------------------------------------#
@@ -219,13 +220,31 @@ def select_corpus_documents(textid):
 def corpus_data(id):
     # text_id = request.json["text_id"]
 
+    # Corpus data
     corpus_data = Corpus.select_where(id)
 
+    # Documents data
     documents_data = Document.select_txt_by_corpus(id)
+    
+    total_documents = len(documents_data)
 
-    # If the document data is available, return themm
+    # Total annotations
+    total_annotations = 0
+
+    # Iterate over the documents associated with the corpus
+    for document in documents_data:
+        # Get text id of each document
+        text_id=document[0]
+
+        # Get annotations of each document by text id
+        annotations = Annotation.select_where(text_id)
+
+        # Len of annotations
+        total_annotations += len(annotations)
+        
+    # If the data is available, return them
     if corpus_data!=None:
-        return jsonify({"result": corpus_data, "resultdoc" : documents_data})
+        return jsonify({"result": corpus_data, "resultdoc": documents_data, "total_annotations": total_annotations, "total_documents":total_documents})
     else:
         
         return jsonify({"result":"no data"})
