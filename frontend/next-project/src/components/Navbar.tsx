@@ -102,6 +102,11 @@ const NavBar = () => {
                   <Link href="/analyze" className="ml-4 px-3 py-2 rounded-md text-base font-medium">
                     Analyze
                   </Link>
+                  {isAdmin && ( // Verifica si el usuario es administrador
+                    <Link href="/manage" className="ml-4 px-3 py-2 rounded-md text-base font-medium">
+                      Manage
+                    </Link>
+                  )}
                   <button className="ml-4 px-3 py-2 rounded-md text-base font-medium" onClick={handleLogout}>
                         Logout
                   </button>
